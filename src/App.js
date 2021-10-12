@@ -1,13 +1,18 @@
 import './App.less';
 import View1 from '@/pages/ForceGraphView';
 import View2 from '@/pages/WritePoetryView';
+import styled from 'styled-components';
+
+const Item = styled.div`
+  flex: 1 0 0;
+`;
 
 function App() {
 
   return (
     <div className="App">
-      <View1 />
-      <View2 />
+      <Item><View1 /></Item>
+      <Item><View2 /></Item>
     </div>
   );
 }

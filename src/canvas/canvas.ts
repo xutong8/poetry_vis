@@ -23,10 +23,16 @@ class Canvas extends BaseEvent {
     this.initEvent();
   }
 
+  addChild(shape: Shape) {
+    this.children.push(shape);
+  }
+
   initEvent() {
     EVENTS.forEach((eventName) => {
       // 给canvas绑定所有事件
-      this.canvas.addEventListener(eventName as any, this.handleEvent);
+      this.canvas.addEventListener(eventName as any, (event: MouseEvent) =>
+        this.handleEvent(event)
+      );
     });
   }
 
@@ -40,6 +46,11 @@ class Canvas extends BaseEvent {
   getPixelRatio() {
     const pixelRatio = getPixelRatio();
     return pixelRatio >= 1 ? Math.ceil(pixelRatio) : 1;
+  }
+
+  draw() {
+    const ctx = this.ctx;
+    this.children.forEach((shape) => shape.draw(ctx));
   }
 }
 

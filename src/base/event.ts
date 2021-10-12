@@ -1,6 +1,7 @@
 import { IEventHandler, IEventListener } from '@/types/baseEvent';
 
 const EVENTS = [
+  'click',
   'mousedown',
   'mouseup',
   'dblclick',

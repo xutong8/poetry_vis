@@ -7,7 +7,7 @@ export interface IRectConfig {
   y: number;
   width: number;
   height: number;
-  fillStyle: string;
+  fillStyle?: string;
 }
 
 class Rect extends Shape {
@@ -24,7 +24,7 @@ class Rect extends Shape {
     // 获取渲染上下文
     const ctx = this.canvas.ctx;
     // 获取x、y、width和height属性
-    const { x, y, width, height, fillStyle } = this.config;
+    const { x, y, width, height, fillStyle = 'black' } = this.config;
 
     ctx.fillStyle = fillStyle;
     ctx.fillRect(x, y, width, height);
@@ -34,7 +34,6 @@ class Rect extends Shape {
     // 获取点击的位置坐标
     const point = this.getEventPosition(clientX, clientY);
     const { x, y, width, height } = this.config;
-
     return x < point.x && point.x < x + width && y < point.y && point.y < y + height;
   }
 
