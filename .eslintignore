@@ -4,4 +4,4 @@ dist/
 scripts/
 config/
 
-.d.ts
+*.d.ts
