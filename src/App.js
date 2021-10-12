@@ -1,23 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.less';
+import View1 from '@/pages/ForceGraphView';
+import View2 from '@/pages/WritePoetryView';
 
 function App() {
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <View1 />
+      <View2 />
     </div>
   );
 }
