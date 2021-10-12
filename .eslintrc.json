@@ -11,5 +11,8 @@
   "globals": {
     "module": true
   },
-  "rules": {}
+  "rules": {
+    "no-unused-vars": "off",
+    "no-undef": "off"
+  }
 }

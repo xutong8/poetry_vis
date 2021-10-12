@@ -1,4 +1,24 @@
-import { EventType, IEventHandler, IEventListener } from '@/types/baseEvent';
+import { IEventHandler, IEventListener } from '@/types/baseEvent';
+
+const EVENTS = [
+  'mousedown',
+  'mouseup',
+  'dblclick',
+  'mouseout',
+  'mouseover',
+  'mousemove',
+  'mouseleave',
+  'mouseenter',
+  'touchstart',
+  'touchmove',
+  'touchend',
+  'dragenter',
+  'dragover',
+  'dragleave',
+  'drop',
+  'contextmenu',
+  'mousewheel'
+];
 
 class BaseEvent {
   private _listener: IEventListener = {};
@@ -6,7 +26,7 @@ class BaseEvent {
   constructor() {}
 
   // 绑定事件
-  on(type: EventType, handler: IEventHandler) {
+  on(type: string, handler: IEventHandler) {
     if (!this._listener[type]) {
       this._listener[type] = [];
     }
@@ -14,7 +34,7 @@ class BaseEvent {
   }
 
   // 触发事件
-  emit(type: EventType, event: Event) {
+  emit(type: string, event: MouseEvent) {
     // 考虑边界情况
     if (event === null || event.type === null) return;
 
@@ -30,7 +50,7 @@ class BaseEvent {
   }
 
   // 解绑事件
-  remove(type: EventType, handler: IEventHandler) {
+  remove(type: string, handler: IEventHandler) {
     // 如果只指定了第一个参数，则清空当前事件类型下的监听器数组
     if (!handler) {
       this._listener[type] = [];
@@ -47,4 +67,4 @@ class BaseEvent {
   }
 }
 
-export { BaseEvent };
+export { BaseEvent, EVENTS };

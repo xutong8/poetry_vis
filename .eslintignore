@@ -3,5 +3,3 @@ build/
 dist/
 scripts/
 config/
-
-*.d.ts
