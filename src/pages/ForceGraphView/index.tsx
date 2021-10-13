@@ -98,41 +98,49 @@ const ForceGraphView: React.FC<any> = () => {
   };
 
   const render = () => {
-    // const canvas = new Canvas('force_canvas');
-    // const rect1 = new Rect(
-    //   {
-    //     x: 10,
-    //     y: 10,
-    //     width: 50,
-    //     height: 50,
-    //     fillStyle: 'green'
-    //   },
-    //   canvas
-    // );
-    // rect1.on('click', () => {
-    //   console.log('rect1 clicked...');
-    // });
-    // const rect2 = new Rect(
-    //   {
-    //     x: 20,
-    //     y: 20,
-    //     width: 20,
-    //     height: 20,
-    //     fillStyle: 'red'
-    //   },
-    //   canvas
-    // );
-    // rect2.on('click', () => {
-    //   console.log('rect2 clicked...');
-    // });
-    // canvas.addChild(rect1);
-    // canvas.addChild(rect2);
-    // canvas.draw();
+    const canvas = new Canvas('force_canvas');
+
+    const rect1 = new Rect(
+      {
+        x: 10,
+        y: 10,
+        width: 50,
+        height: 50,
+        fillStyle: 'green'
+      },
+      canvas
+    );
+    rect1.on('click', () => {
+      console.log('rect1 clicked...');
+    });
+    const rect2 = new Rect(
+      {
+        x: 20,
+        y: 20,
+        width: 20,
+        height: 20,
+        fillStyle: 'red'
+      },
+      canvas
+    );
+    rect2.on('click', () => {
+      console.log('rect2 clicked...');
+    });
+    canvas.addChild(rect1);
+    canvas.addChild(rect2);
+    canvas.draw();
+
+    return canvas;
   };
 
   useEffect(() => {
-    fetchAuthors();
-  }, []);
+    // fetchAuthors();
+    const canvas = render();
+
+    return function cleanup() {
+      canvas.clear();
+    };
+  }, [canvasWidth, canvasHeight]);
 
   return (
     <div className="force_container" ref={containerRef}>

@@ -6,6 +6,8 @@ class Canvas extends BaseEvent {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   children: Shape[];
+  width: number;
+  height: number;
 
   constructor(id: string) {
     super();
@@ -16,8 +18,16 @@ class Canvas extends BaseEvent {
     }
 
     this.canvas = canvas;
+
+    const layout = canvas.getBoundingClientRect();
+
+    this.width = layout.width;
+    this.height = layout.height;
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     this.children = [];
+
+    const pixelRatio = this.getPixelRatio();
+    this.ctx.scale(pixelRatio, pixelRatio);
 
     // 初始化事件机制
     this.initEvent();
@@ -51,6 +61,11 @@ class Canvas extends BaseEvent {
   draw() {
     const ctx = this.ctx;
     this.children.forEach((shape) => shape.draw(ctx));
+  }
+
+  clear() {
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    this.children = [];
   }
 }
 
