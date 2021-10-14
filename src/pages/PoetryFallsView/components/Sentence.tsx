@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import '../index.less';
-interface Props {
+interface IProps {
   data: any;
   z: number;
 }
 
-const font_size = 18;
+const font_size = 30;
 
-const Sentence: React.FC<Props> = (props) => {
+const Sentence: React.FC<IProps> = (props) => {
   const [isMouseOover, setMouseOover] = useState<boolean>(false);
   const { data, z } = props;
   const { x, y, content, id } = data;
@@ -25,7 +25,11 @@ const Sentence: React.FC<Props> = (props) => {
       {words.map((word: string, index: number) => {
         const opacity = opacity_k * index * 0.7 + 0.3; //+0.4*(1-z)
         return (
-          <span key={index} className="word" style={{ opacity: opacity, fontSize: size }}>
+          <span
+            key={index}
+            className="word"
+            style={{ opacity: opacity, fontSize: size / 16 + 'rem' }}
+          >
             {word}
           </span>
         );

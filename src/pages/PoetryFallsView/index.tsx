@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { httpRequest } from '@/services';
 import Sentence from './components/sentence';
 import title from '@/assets/images/clip_article.png';
+import useWindowSize from '@/hooks/use-windows-size';
 import './index.less';
 
-const font_size = 18;
+type ResponseData = [string, string][][];
+
+const font_size = 30;
 // const max_stage_nums = 3;
 const stage_dist = 10;
-const poetry_margin = 20;
+const poetry_margin = 30;
 
 const PoetryFallsView: React.FC = () => {
   const [poteryStages, setPoteryStages] = useState<any[]>([]);
-  const [width, height] = [1920, 1080];
+  const [width, height] = useWindowSize();
 
   const addPoteries = () => {
     const arrangePosition = (poetries: any) => {
