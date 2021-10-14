@@ -1,4 +1,3 @@
-import { IEventPosition } from '@/types/baseEvent';
 import { Canvas } from '../canvas';
 import { Shape } from './base';
 
@@ -11,13 +10,11 @@ export interface IRectConfig {
 }
 
 class Rect extends Shape {
-  canvas: Canvas;
   config: IRectConfig;
 
   constructor(config: IRectConfig, canvas: Canvas) {
-    super();
+    super(canvas);
     this.config = config;
-    this.canvas = canvas;
   }
 
   draw() {
@@ -35,14 +32,6 @@ class Rect extends Shape {
     const point = this.getEventPosition(clientX, clientY);
     const { x, y, width, height } = this.config;
     return x < point.x && point.x < x + width && y < point.y && point.y < y + height;
-  }
-
-  getEventPosition(clientX: number, clientY: number): IEventPosition {
-    const bbox = this.canvas.canvas.getBoundingClientRect();
-    return {
-      x: clientX - bbox.left,
-      y: clientY - bbox.top
-    };
   }
 }
 

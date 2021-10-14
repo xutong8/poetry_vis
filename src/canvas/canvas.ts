@@ -2,6 +2,12 @@ import { getPixelRatio } from '@/utils';
 import { BaseEvent, EVENTS } from '../base';
 import { Shape } from './shape/base';
 
+export interface ICanvasConfig {
+  width: number;
+  height: number;
+}
+
+// TODO: 整体的设计需要轻微调整
 class Canvas extends BaseEvent {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
@@ -9,24 +15,28 @@ class Canvas extends BaseEvent {
   width: number;
   height: number;
 
-  constructor(id: string) {
+  constructor(id: string, config: ICanvasConfig) {
     super();
 
     const canvas = document.getElementById(id) as HTMLCanvasElement;
+
     if (!canvas) {
       throw new Error(`id ${id} is unvalid string.`);
     }
 
+    const pixelRatio = this.getPixelRatio();
+
     this.canvas = canvas;
+    this.canvas.width = config.width * pixelRatio;
+    this.canvas.height = config.height * pixelRatio;
+    this.canvas.style.width = `${config.width}px`;
+    this.canvas.style.height = `${config.height}px`;
 
-    const layout = canvas.getBoundingClientRect();
-
-    this.width = layout.width;
-    this.height = layout.height;
+    this.width = config.width;
+    this.height = config.height;
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     this.children = [];
 
-    const pixelRatio = this.getPixelRatio();
     this.ctx.scale(pixelRatio, pixelRatio);
 
     // 初始化事件机制
@@ -64,8 +74,8 @@ class Canvas extends BaseEvent {
   }
 
   clear() {
-    this.ctx.clearRect(0, 0, this.width, this.height);
     this.children = [];
+    this.ctx.clearRect(0, 0, this.width, this.height);
   }
 }
 
