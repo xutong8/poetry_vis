@@ -10,12 +10,9 @@ export interface ITextConfig extends IBaseConfig {
   fillStyle?: string;
 }
 
-class Text extends Shape {
-  config: ITextConfig;
-
+class Text extends Shape<ITextConfig> {
   constructor(config: ITextConfig, canvas: Canvas) {
-    super(canvas);
-    this.config = config;
+    super(canvas, config);
   }
 
   isEventRegion(clientX: number, clientY: number) {

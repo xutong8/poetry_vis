@@ -10,12 +10,9 @@ export interface IPathConfig extends IBaseConfig {
   fillString?: string;
 }
 
-class Path extends Shape {
-  config: IPathConfig;
-
+class Path extends Shape<IPathConfig> {
   constructor(config: IPathConfig, canvas: Canvas) {
-    super(canvas);
-    this.config = config;
+    super(canvas, config);
   }
 
   isEventRegion(clientX: number, clientY: number) {

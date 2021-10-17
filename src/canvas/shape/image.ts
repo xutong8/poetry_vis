@@ -13,12 +13,11 @@ export interface IImageConfig {
   height: number;
 }
 
-class ImageShape extends Shape {
-  config: IImageConfig;
+class ImageShape extends Shape<IImageConfig> {
   image: HTMLImageElement | undefined;
 
   constructor(config: IImageConfig, canvas: Canvas) {
-    super(canvas);
+    super(canvas, config);
     const image = new Image();
 
     image.onload = () => {

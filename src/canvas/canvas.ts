@@ -73,6 +73,13 @@ class Canvas extends BaseEvent {
     this.children.forEach((shape) => shape.draw(ctx));
   }
 
+  reDraw() {
+    // 1. 先清除画布
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    // 2. 绘制
+    this.draw();
+  }
+
   clear() {
     this.children = [];
     this.ctx.clearRect(0, 0, this.width, this.height);

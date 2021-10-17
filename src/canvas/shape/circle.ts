@@ -8,19 +8,17 @@ export interface ICircleConfig {
   fillStyle?: string;
 }
 
-class Circle extends Shape {
-  config: ICircleConfig;
-
+class Circle extends Shape<ICircleConfig> {
   constructor(config: ICircleConfig, canvas: Canvas) {
-    super(canvas);
-    this.config = config;
+    super(canvas, config);
   }
 
   isEventRegion(clientX: number, clientY: number) {
     // 获取点击的位置坐标
-    const point = this.getEventPosition(clientX, clientY);
-    const { x, y, r } = this.config;
-    return (point.x - x) * (point.x - x) + (point.y - y) * (point.y - y) < r * r;
+    // const point = this.getEventPosition(clientX, clientY);
+    // const { x, y, r } = this.config;
+    // return (point.x - x) * (point.x - x) + (point.y - y) * (point.y - y) < r * r;
+    return true;
   }
 
   draw() {

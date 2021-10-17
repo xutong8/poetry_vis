@@ -1,19 +1,33 @@
 {
   "compilerOptions": {
+    // 目标语言使用ES6
     "target": "ES6",
+    // 使用的模块系统
+    "module": "ES2015",
+    // 指定输出目录
     "outDir": "build",
+    // 允许编译javascript文件
     "allowJs": true,
+    // 开启严格模式
     "strict": true,
+    // 在表达式和声明上有隐含的any类型时报错
     "noImplicitAny": true,
+    // 允许从没有设置默认导出的模块中默认导入
     "allowSyntheticDefaultImports": true,
+    // 模块解析选项
     "moduleResolution": "node",
-    "jsx": "react-jsx",
+    // 基本路径
     "baseUrl": "src",
+    // 指定jsx代码的生成
+    "jsx": "react-jsx",
+    // 路径映射
     "paths": {
       "@/*": ["*"],
       "@/pages/*": ["pages/*"]
     }
   },
+  // 包括
   "include": ["src", "**/*.ts", "**/*.tsx"],
+  // 排除
   "exclude": ["node_modules"]
 }

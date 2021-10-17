@@ -9,12 +9,9 @@ export interface IRectConfig {
   fillStyle?: string;
 }
 
-class Rect extends Shape {
-  config: IRectConfig;
-
+class Rect extends Shape<IRectConfig> {
   constructor(config: IRectConfig, canvas: Canvas) {
-    super(canvas);
-    this.config = config;
+    super(canvas, config);
   }
 
   draw() {

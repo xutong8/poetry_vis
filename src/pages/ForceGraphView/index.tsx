@@ -150,6 +150,12 @@ const ForceGraphView: React.FC<any> = () => {
           },
           canvas
         );
+
+        circle.on('mouseenter', () => {
+          circle.attr('r', 14);
+          canvas.reDraw();
+        });
+
         // 作者的名字
         const text = new Text(
           {

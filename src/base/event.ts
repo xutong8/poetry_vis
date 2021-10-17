@@ -36,6 +36,8 @@ class BaseEvent {
 
   // 触发事件
   emit(type: string, event: MouseEvent) {
+    console.log('type: ', type);
+
     // 考虑边界情况
     if (event === null || event.type === null) return;
 

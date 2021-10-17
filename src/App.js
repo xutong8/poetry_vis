@@ -14,12 +14,12 @@ function App() {
       <Item>
         <View1 />
       </Item>
-      <Item>
+      {/* <Item>
         <View2 />
       </Item>
       <Item>
         <View3 />
-      </Item>
+      </Item> */}
     </div>
   );
 }

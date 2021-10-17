@@ -16,7 +16,7 @@ const PoetryFallsView: React.FC = () => {
   const [poteryStages, setPoteryStages] = useState<any[]>([]);
   const [width, height] = useWindowSize();
 
-  const addPoteries = () => {
+  const addPoetries = () => {
     const arrangePosition = (poetries: any) => {
       // 去掉同层的遮挡
       poetries = poetries.sort((a: any, b: any) => a.x - b.x);
@@ -35,7 +35,6 @@ const PoetryFallsView: React.FC = () => {
       let poetry_stagess = (res.data as any[]).map((arr: any[], index: number) => {
         let poetries = arr.map((elm) => {
           const [id, content] = elm;
-          console.log('ele', id, content);
           const x = Math.random() * width, //*0.9+width*0.05,
             y = Math.random() * height * 3 - height;
 
@@ -95,7 +94,7 @@ const PoetryFallsView: React.FC = () => {
   };
 
   useEffect(() => {
-    addPoteries();
+    addPoetries();
   }, []);
 
   return (
@@ -109,8 +108,9 @@ const PoetryFallsView: React.FC = () => {
           const opacity = 1;
           return (
             <div key={stage_index} className="stage" style={{ opacity: opacity }}>
-              {poetries.map((elm: any) => (
+              {poetries.map((elm: any, index: number) => (
                 <Sentence
+                  key={index}
                   z={z}
                   data={elm}
                   // onClick={this.handleClickPotery.bind(this)}
