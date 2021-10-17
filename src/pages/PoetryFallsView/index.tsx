@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { httpRequest } from '@/services';
-import Sentence from './components/sentence';
+import Sentence from './components/Sentence';
 import title from '@/assets/images/clip_article.png';
 import useWindowSize from '@/hooks/use-windows-size';
 import './index.less';
