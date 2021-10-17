@@ -1,14 +1,10 @@
-import { Canvas } from '@/canvas/canvas';
 import { useElementSize } from '@/hooks/useElementSize';
 import { httpRequest } from '@/services';
 import React, { useEffect, useRef, useState } from 'react';
 import './index.less';
 import { forceCenter, forceLink, forceManyBody, forceSimulation, forceCollide } from 'd3-force';
-import { Circle } from '@/canvas/shape/circle';
+import { Circle, Image, Path, Text, Canvas } from 'malyan-ink';
 import { backgroundImage, group_stars } from '@/assets/images';
-import { Image } from '@/canvas/shape/image';
-import { Path } from '@/canvas/shape/path';
-import { Text } from '@/canvas/shape/text';
 
 interface IAuthor2Rank {
   [authorName: string]: number;
