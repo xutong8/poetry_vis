@@ -3,8 +3,8 @@ import { httpRequest } from '@/services';
 import React, { useEffect, useRef, useState } from 'react';
 import './index.less';
 import { forceCenter, forceLink, forceManyBody, forceSimulation, forceCollide } from 'd3-force';
-import { Circle, Image, Path, Text, Canvas } from 'malyan-ink';
 import { backgroundImage, group_stars } from '@/assets/images';
+import { selectAll, select } from 'd3-selection';
 
 interface IAuthor2Rank {
   [authorName: string]: number;
@@ -32,17 +32,24 @@ interface IEdge {
 }
 
 const ForceGraphView: React.FC<any> = () => {
-  // 获取container的ref
-  const containerRef = useRef<HTMLDivElement>(null);
+  // 获取content的ref
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  // 计算canvas的宽度和高度
-  const [canvasWidth, canvasHeight] = useElementSize(containerRef);
-
-  // canvasRef
-  const canvasRef = useRef<Canvas>();
+  // 计算svg的宽度和高度
+  const [svgWidth, svgHeight] = useElementSize(contentRef);
 
   // dataRef
   const [apiData, setApiData] = useState<IResponseData>();
+
+  // nodes的state
+  const [nodesState, setNodesState] = useState<INode[]>([]);
+  // edges的state
+  const [edgesState, setEdgesState] = useState<IEdge[]>([]);
+
+  // 最小的边rank
+  const [minRank, setMinRank] = useState<number>(0);
+  // 最大的边rank
+  const [maxRank, setMaxRank] = useState<number>(0);
 
   // 发送请求
   const fetchAuthors = async () => {
@@ -53,8 +60,6 @@ const ForceGraphView: React.FC<any> = () => {
   // 渲染Graph
   const renderGraph = () => {
     const { potery_reltions = [], social_relations = [], author2rank = {} } = apiData ?? {};
-
-    canvasRef.current?.clear();
 
     // 作者名字数组
     const names = new Set<string>();
@@ -97,80 +102,50 @@ const ForceGraphView: React.FC<any> = () => {
       });
     });
 
-    const simulation = forceSimulation(nodes as any)
+    setNodesState(nodes);
+    setEdgesState(edges);
+    setMinRank(min_rank);
+    setMaxRank(max_rank);
+  };
+
+  // 重新调整布局
+  const relayoutGraph = () => {
+    const simulation = forceSimulation(nodesState as any)
       .force('charge', forceManyBody().distanceMin(30))
-      .force('link', forceLink(edges))
+      .force('link', forceLink(edgesState))
       .force(
         'center',
         forceCenter()
-          .x(canvasWidth / 2)
-          .y(canvasHeight / 2)
+          .x(svgWidth / 2)
+          .y(svgHeight / 2)
       )
       .force('collision', forceCollide(40));
 
-    const canvas: Canvas = new Canvas('force_canvas', {
-      width: canvasWidth,
-      height: canvasHeight
-    });
-    canvasRef.current = canvas;
-
-    const image = new Image(
-      {
-        src: group_stars,
-        sx: 0,
-        sy: 0,
-        swidth: 248,
-        sheight: 1055,
-        x: 20,
-        y: 100,
-        width: 124,
-        height: 527
-      },
-      canvas
-    );
-
     simulation.on('tick', () => {
-      // 每轮tick绘制之前先清除上一轮tick绘制的图形
-      canvas.clear();
-      // 添加群星荟萃的图片
-      canvas.addChild(image);
       // 添加作者
-      nodes.forEach((node) => {
-        // 作者
-        const circle = new Circle(
-          {
-            x: node?.x ?? 0,
-            y: node?.y ?? 0,
-            r: ((node.rank - min_rank) / (max_rank - min_rank)) * 10 + 3,
-            fillStyle: '#b77900'
-          },
-          canvas
-        );
+      select('.force_svg')
+        .select('.force_nodes')
+        .selectAll('.force_node')
+        .select('.force_circle')
+        .data(nodesState)
+        .attr('cx', (d) => d.x as number)
+        .attr('cy', (d) => d.y as number);
 
-        circle.on('mouseenter', () => {
-          circle.attr('r', 14);
-          canvas.reDraw();
-        });
+      // 添加作者名字
+      select('.force_svg')
+        .select('.force_nodes')
+        .selectAll('.force_node')
+        .select('.force_text')
+        .data(nodesState)
+        .attr('x', (d) => (d.x ? d.x + 15 : 0) as number)
+        .attr('y', (d) => (d.y ? d.y - 15 : 0) as number);
 
-        // 作者的名字
-        const text = new Text(
-          {
-            x: node.x ? node.x + 15 : 0,
-            y: node.y ? node.y - 15 : 0,
-            text: node.name,
-            fontStyle: '20px Georgia',
-            isFill: true,
-            fillStyle: 'black'
-          },
-          canvas
-        );
-        canvas.addChild(text);
-        canvas.addChild(circle);
-      });
       // 添加边
-      edges
-        .filter((edge) => edge.link_type === 'social')
-        .forEach((edge) => {
+      select('.force_svg')
+        .select('.force_edges')
+        .selectAll('.force_edge')
+        .data(edgesState)
+        .attr('d', (edge: IEdge) => {
           const sourceX = edge.source.x ?? 0;
           const sourceY = edge.source.y ?? 0;
           const targetX = edge.target.x ?? 0;
@@ -179,22 +154,36 @@ const ForceGraphView: React.FC<any> = () => {
           const dy = targetY - sourceY;
           const dr = Math.sqrt(dx * dx + dy * dy);
 
-          const link = new Path(
-            {
-              paths: `
-              M ${sourceX} ${sourceY}
-              A ${dr} ${dr} 0 0 1 ${targetX} ${targetY}
-              `,
-              strokeStyle: '#b77900',
-              isStroke: true,
-              isFill: false
-            },
-            canvas
-          );
-          canvas.addChild(link);
+          return `M ${sourceX} ${sourceY}
+          A ${dr} ${dr} 0 0 1 ${targetX} ${targetY}`;
         });
-      canvas.draw();
     });
+  };
+
+  const bindEvents = () => {
+    select('.force_svg')
+      .select('.force_nodes')
+      .selectAll('.force_node')
+      .select('.force_circle')
+      .data(nodesState)
+      .on('mouseenter', function () {
+        select(this).attr('r', 14);
+      })
+      .on('mouseleave', function (event, node) {
+        select(this).attr(
+          'r',
+          minRank !== maxRank ? ((node.rank - minRank) / (maxRank - minRank)) * 10 + 3 : 0
+        );
+      });
+  };
+
+  const unbindEvents = () => {
+    select('.force_svg')
+      .select('.force_nodes')
+      .selectAll('.force_node')
+      .select('.force_circle')
+      .on('mouseenter', null)
+      .on('mouseleave', null);
   };
 
   useEffect(() => {
@@ -203,17 +192,76 @@ const ForceGraphView: React.FC<any> = () => {
 
   useEffect(() => {
     renderGraph();
-  }, [canvasWidth, canvasHeight, canvasRef.current, apiData]);
+  }, [svgWidth, svgHeight, apiData]);
+
+  useEffect(() => {
+    relayoutGraph();
+  }, [nodesState, edgesState]);
+
+  useEffect(() => {
+    bindEvents();
+    return () => unbindEvents();
+  }, [minRank, maxRank, nodesState, edgesState]);
+
+  useEffect(() => {}, [contentRef.current]);
 
   return (
     <div
       className="force_container"
-      ref={containerRef}
       style={{
         backgroundImage: `url(${backgroundImage})`
       }}
     >
-      <canvas id="force_canvas"></canvas>
+      <img src={group_stars} className="img" />
+      <div className="force_content" ref={contentRef}>
+        <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="force_svg">
+          <g className="force_nodes">
+            {nodesState.map((node) => {
+              return (
+                <g className="force_node" key={node.name}>
+                  <circle
+                    className="force_circle"
+                    cx={node.x ? node.x + 15 : 0}
+                    cy={node.y ? node.y - 15 : 0}
+                    r={
+                      minRank !== maxRank
+                        ? ((node.rank - minRank) / (maxRank - minRank)) * 10 + 3
+                        : 0
+                    }
+                    fill={'#b77900'}
+                  />
+                  <text className="force_text" x={node.x} y={node.y} fill={'black'}>
+                    {node.name}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+          <g className="force_edges">
+            {edgesState
+              .filter((edge) => edge.link_type === 'social')
+              .map((edge: IEdge, index: number) => {
+                const sourceX = edge.source.x ?? 0;
+                const sourceY = edge.source.y ?? 0;
+                const targetX = edge.target.x ?? 0;
+                const targetY = edge.target.y ?? 0;
+                const dx = targetX - sourceX;
+                const dy = targetY - sourceY;
+                const dr = Math.sqrt(dx * dx + dy * dy);
+                return (
+                  <path
+                    className="force_edge"
+                    key={index}
+                    d={`M ${sourceX} ${sourceY}
+                  A ${dr} ${dr} 0 0 1 ${targetX} ${targetY}`}
+                    stroke="#b77900"
+                    fill="none"
+                  />
+                );
+              })}
+          </g>
+        </svg>
+      </div>
     </div>
   );
 };

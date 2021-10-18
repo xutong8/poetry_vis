@@ -1,9 +1,5 @@
 {
   "compilerOptions": {
-    // 目标语言使用ES6
-    "target": "ES6",
-    // 使用的模块系统
-    "module": "ES2015",
     // 指定输出目录
     "outDir": "build",
     // 允许编译javascript文件
