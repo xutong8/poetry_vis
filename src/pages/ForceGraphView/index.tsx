@@ -5,7 +5,8 @@ import './index.less';
 import { forceCenter, forceLink, forceManyBody, forceSimulation, forceCollide } from 'd3-force';
 import { backgroundImage, group_stars } from '@/assets/images';
 import { selectAll, select } from 'd3-selection';
-
+import { INode, IEdge, LinkType } from '@/types/force-graph';
+import { computeForceLinkPath } from '@/utils';
 interface IAuthor2Rank {
   [authorName: string]: number;
 }
@@ -14,21 +15,6 @@ interface IResponseData {
   // TODO: 后端字段名称有问题
   potery_reltions: [string, string, number][];
   social_relations: [string, string, string, string][];
-}
-
-type LinkType = 'social' | 'poetry';
-
-interface INode {
-  name: string;
-  rank: number;
-  x?: number;
-  y?: number;
-}
-
-interface IEdge {
-  source: INode;
-  target: INode;
-  link_type: LinkType;
 }
 
 const ForceGraphView: React.FC<any> = () => {
@@ -145,18 +131,7 @@ const ForceGraphView: React.FC<any> = () => {
         .select('.force_edges')
         .selectAll('.force_edge')
         .data(edgesState)
-        .attr('d', (edge: IEdge) => {
-          const sourceX = edge.source.x ?? 0;
-          const sourceY = edge.source.y ?? 0;
-          const targetX = edge.target.x ?? 0;
-          const targetY = edge.target.y ?? 0;
-          const dx = targetX - sourceX;
-          const dy = targetY - sourceY;
-          const dr = Math.sqrt(dx * dx + dy * dy);
-
-          return `M ${sourceX} ${sourceY}
-          A ${dr} ${dr} 0 0 1 ${targetX} ${targetY}`;
-        });
+        .attr('d', (edge: IEdge) => computeForceLinkPath(edge));
     });
   };
 
@@ -241,19 +216,11 @@ const ForceGraphView: React.FC<any> = () => {
             {edgesState
               .filter((edge) => edge.link_type === 'social')
               .map((edge: IEdge, index: number) => {
-                const sourceX = edge.source.x ?? 0;
-                const sourceY = edge.source.y ?? 0;
-                const targetX = edge.target.x ?? 0;
-                const targetY = edge.target.y ?? 0;
-                const dx = targetX - sourceX;
-                const dy = targetY - sourceY;
-                const dr = Math.sqrt(dx * dx + dy * dy);
                 return (
                   <path
                     className="force_edge"
                     key={index}
-                    d={`M ${sourceX} ${sourceY}
-                  A ${dr} ${dr} 0 0 1 ${targetX} ${targetY}`}
+                    d={computeForceLinkPath(edge)}
                     stroke="#b77900"
                     fill="none"
                   />
