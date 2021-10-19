@@ -1880,6 +1880,10 @@
   version "3.0.0"
   resolved "https://registry.nlark.com/@types/d3-ease/download/@types/d3-ease-3.0.0.tgz#c29926f8b596f9dadaeca062a32a45365681eae0"
   integrity sha1-wpkm+LWW+dra7KBioypFNlaB6uA=
+"@types/d3-color@*":
+  version "3.0.2"
+  resolved "https://registry.nlark.com/@types/d3-color/download/@types/d3-color-3.0.2.tgz?cache=0&sync_timestamp=1629707071439&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fd3-color%2Fdownload%2F%40types%2Fd3-color-3.0.2.tgz#53f2d6325f66ee79afd707c05ac849e8ae0edbb0"
+  integrity sha1-U/LWMl9m7nmv1wfAWshJ6K4O27A=
 
 "@types/d3-force@^3.0.3":
   version "3.0.3"
@@ -1897,6 +1901,12 @@
   integrity sha1-Qb4kESavRjBSTq2csQCKsvDybmk=
   dependencies:
     "@types/d3-time" "*"
+"@types/d3-interpolate@*":
+  version "3.0.1"
+  resolved "https://registry.nlark.com/@types/d3-interpolate/download/@types/d3-interpolate-3.0.1.tgz#e7d17fa4a5830ad56fe22ce3b4fac8541a9572dc"
+  integrity sha1-59F/pKWDCtVv4izjtPrIVBqVctw=
+  dependencies:
+    "@types/d3-color" "*"
 
 "@types/d3-selection@*", "@types/d3-selection@^3.0.1":
   version "3.0.1"
@@ -1920,6 +1930,12 @@
   resolved "https://registry.nlark.com/@types/d3-transition/download/@types/d3-transition-3.0.1.tgz#c9a96125567173d6163a6985b874f79154f4cc3d"
   integrity sha1-yalhJVZxc9YWOmmFuHT3kVT0zD0=
   dependencies:
+"@types/d3-zoom@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.nlark.com/@types/d3-zoom/download/@types/d3-zoom-3.0.1.tgz?cache=0&sync_timestamp=1629708157157&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fd3-zoom%2Fdownload%2F%40types%2Fd3-zoom-3.0.1.tgz#4bfc7e29625c4f79df38e2c36de52ec3e9faf826"
+  integrity sha1-S/x+KWJcT3nfOOLDbeUuw+n6+CY=
+  dependencies:
+    "@types/d3-interpolate" "*"
     "@types/d3-selection" "*"
 
 "@types/eslint@^7.2.6":
@@ -4346,6 +4362,7 @@ d3-force@^3.0.0:
   integrity sha1-5BuBsqt5J3FB7BQEql0FAB2mQIQ=
 
 "d3-interpolate@1 - 3", "d3-interpolate@1.2.0 - 3":
+"d3-interpolate@1 - 3":
   version "3.0.1"
   resolved "https://registry.nlark.com/d3-interpolate/download/d3-interpolate-3.0.1.tgz#3c47aa5b32c5b3dfb56ef3fd4342078a632b400d"
   integrity sha1-PEeqWzLFs9+1bvP9Q0IHimMrQA0=
@@ -4374,6 +4391,7 @@ d3-scale@^4.0.2:
     d3-time-format "2 - 4"
 
 d3-selection@3, d3-selection@^3.0.0:
+"d3-selection@2 - 3", d3-selection@3, d3-selection@^3.0.0:
   version "3.0.0"
   resolved "https://registry.nlark.com/d3-selection/download/d3-selection-3.0.0.tgz#c25338207efa72cc5b9bd1458a1a41901f1e1b31"
   integrity sha1-wlM4IH76csxbm9FFihpBkB8eGzE=
@@ -4405,6 +4423,7 @@ d3-shape@^3.0.1:
   integrity sha1-YoTSonCChbGrt+IB7aQ4CvNeY7A=
 
 d3-transition@^3.0.1:
+"d3-transition@2 - 3":
   version "3.0.1"
   resolved "https://registry.nlark.com/d3-transition/download/d3-transition-3.0.1.tgz#6869fdde1448868077fdd5989200cb61b2a1645f"
   integrity sha1-aGn93hRIhoB3/dWYkgDLYbKhZF8=
@@ -4414,6 +4433,17 @@ d3-transition@^3.0.1:
     d3-ease "1 - 3"
     d3-interpolate "1 - 3"
     d3-timer "1 - 3"
+
+d3-zoom@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.nlark.com/d3-zoom/download/d3-zoom-3.0.0.tgz#d13f4165c73217ffeaa54295cd6969b3e7aee8f3"
+  integrity sha1-0T9BZccyF//qpUKVzWlps+eu6PM=
+  dependencies:
+    d3-dispatch "1 - 3"
+    d3-drag "2 - 3"
+    d3-interpolate "1 - 3"
+    d3-selection "2 - 3"
+    d3-transition "2 - 3"
 
 d@1, d@^1.0.1:
   version "1.0.1"
