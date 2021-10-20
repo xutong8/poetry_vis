@@ -11,13 +11,13 @@ const Item = styled.div`
 function App() {
   return (
     <div className="App">
-      <Item>
-        <View1 />
-      </Item>
       {/* <Item>
+        <View1 />
+      </Item> */}
+      <Item>
         <View2 />
       </Item>
-      <Item>
+      {/* <Item>
         <View3 />
       </Item> */}
     </div>

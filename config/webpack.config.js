@@ -522,8 +522,7 @@ module.exports = function (webpackEnv) {
                   sourceMap: isEnvProduction
                     ? shouldUseSourceMap
                     : isEnvDevelopment,
-                },
-                'less-loader'
+                }
               ),
               sideEffects: true
             },

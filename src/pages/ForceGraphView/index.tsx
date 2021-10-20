@@ -178,15 +178,8 @@ const ForceGraphView: React.FC<any> = () => {
     return () => unbindEvents();
   }, [minRank, maxRank, nodesState, edgesState]);
 
-  useEffect(() => {}, [contentRef.current]);
-
   return (
-    <div
-      className="force_container"
-      style={{
-        backgroundImage: `url(${backgroundImage})`
-      }}
-    >
+    <div className="force_container">
       <img src={group_stars} className="img" />
       <div className="force_content" ref={contentRef}>
         <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="force_svg">

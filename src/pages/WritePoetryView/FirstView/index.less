@@ -1,0 +1,71 @@
+.selected {
+  color: #a71616 !important;
+  cursor: auto;
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.first_view {
+  width: 100%;
+  height: 100%;
+  padding: 36px 48px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  .title {
+    text-align: center;
+    font-size: 36px;
+    line-height: 36px;
+  }
+
+  .sentence_select {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 0 36px;
+  }
+
+  .emotion_select {
+    padding: 24px 0 18px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .base_emotion {
+    width: 100px;
+    margin-top: 16px;
+  }
+
+  .text {
+    color: #808080;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 36px;
+    display: flex;
+    align-items: center;
+  }
+
+  .emotionSelected {
+    &:extend(.selected);
+  }
+
+  .sentenceSelected {
+    &:extend(.selected);
+
+    &::before {
+      content: '';
+      display: block;
+      width: 27px;
+      height: 27px;
+      float: left;
+      background-image: url('../../../assets/images/small_pen.svg');
+      background-size: cover;
+    }
+  }
+
+  .radar_container {
+    flex: 1 0 0;
+    display: flex;
+  }
+}

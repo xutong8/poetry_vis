@@ -1835,10 +1835,34 @@
   resolved "https://registry.nlark.com/@types/d3-force/download/@types/d3-force-3.0.3.tgz#76cb20d04ae798afede1ea6e41750763ff5a9c82"
   integrity sha1-dssg0ErnmK/t4epuQXUHY/9anII=
 
+"@types/d3-path@*":
+  version "3.0.0"
+  resolved "https://registry.nlark.com/@types/d3-path/download/@types/d3-path-3.0.0.tgz#939e3a784ae4f80b1fde8098b91af1776ff1312b"
+  integrity sha1-k546eErk+Asf3oCYuRrxd2/xMSs=
+
+"@types/d3-scale@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.npmmirror.com/@types/d3-scale/download/@types/d3-scale-4.0.2.tgz#41be241126af4630524ead9cb1008ab2f0f26e69"
+  integrity sha1-Qb4kESavRjBSTq2csQCKsvDybmk=
+  dependencies:
+    "@types/d3-time" "*"
+
 "@types/d3-selection@^3.0.1":
   version "3.0.1"
   resolved "https://registry.nlark.com/@types/d3-selection/download/@types/d3-selection-3.0.1.tgz#e57b01ab69b18b380f68db97b76ceefe62f17191"
   integrity sha1-5XsBq2mxizgPaNuXt2zu/mLxcZE=
+
+"@types/d3-shape@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.nlark.com/@types/d3-shape/download/@types/d3-shape-3.0.2.tgz#4b1ca4ddaac294e76b712429726d40365cd1e8ca"
+  integrity sha1-Sxyk3arClOdrcSQpcm1ANlzR6Mo=
+  dependencies:
+    "@types/d3-path" "*"
+
+"@types/d3-time@*":
+  version "3.0.0"
+  resolved "https://registry.nlark.com/@types/d3-time/download/@types/d3-time-3.0.0.tgz#e1ac0f3e9e195135361fa1a1d62f795d87e6e819"
+  integrity sha1-4awPPp4ZUTU2H6Gh1i95XYfm6Bk=
 
 "@types/eslint@^7.2.6":
   version "7.2.6"
@@ -4145,6 +4169,18 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
+"d3-array@2 - 3", "d3-array@2.10.0 - 3":
+  version "3.1.1"
+  resolved "https://registry.npmmirror.com/d3-array/download/d3-array-3.1.1.tgz?cache=0&sync_timestamp=1633231313339&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fd3-array%2Fdownload%2Fd3-array-3.1.1.tgz#7797eb53ead6b9083c75a45a681e93fc41bc468c"
+  integrity sha1-d5frU+rWuQg8daRaaB6T/EG8Row=
+  dependencies:
+    internmap "1 - 2"
+
+"d3-color@1 - 3":
+  version "3.0.1"
+  resolved "https://registry.nlark.com/d3-color/download/d3-color-3.0.1.tgz#03316e595955d1fcd39d9f3610ad41bb90194d0a"
+  integrity sha1-AzFuWVlV0fzTnZ82EK1Bu5AZTQo=
+
 "d3-dispatch@1 - 3":
   version "3.0.1"
   resolved "https://registry.nlark.com/d3-dispatch/download/d3-dispatch-3.0.1.tgz?cache=0&sync_timestamp=1622918261265&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fd3-dispatch%2Fdownload%2Fd3-dispatch-3.0.1.tgz#5fc75284e9c2375c36c839411a0cf550cbfc4d5e"
@@ -4159,15 +4195,64 @@ d3-force@^3.0.0:
     d3-quadtree "1 - 3"
     d3-timer "1 - 3"
 
+"d3-format@1 - 3":
+  version "3.0.1"
+  resolved "https://registry.nlark.com/d3-format/download/d3-format-3.0.1.tgz#e41b81b2ab79277141ec1404aa5d05001da64084"
+  integrity sha1-5BuBsqt5J3FB7BQEql0FAB2mQIQ=
+
+"d3-interpolate@1.2.0 - 3":
+  version "3.0.1"
+  resolved "https://registry.nlark.com/d3-interpolate/download/d3-interpolate-3.0.1.tgz#3c47aa5b32c5b3dfb56ef3fd4342078a632b400d"
+  integrity sha1-PEeqWzLFs9+1bvP9Q0IHimMrQA0=
+  dependencies:
+    d3-color "1 - 3"
+
+"d3-path@1 - 3":
+  version "3.0.1"
+  resolved "https://registry.nlark.com/d3-path/download/d3-path-3.0.1.tgz#f09dec0aaffd770b7995f1a399152bf93052321e"
+  integrity sha1-8J3sCq/9dwt5lfGjmRUr+TBSMh4=
+
 "d3-quadtree@1 - 3":
   version "3.0.1"
   resolved "https://registry.nlark.com/d3-quadtree/download/d3-quadtree-3.0.1.tgz#6dca3e8be2b393c9a9d514dabbd80a92deef1a4f"
   integrity sha1-bco+i+Kzk8mp1RTau9gKkt7vGk8=
 
+d3-scale@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.npmmirror.com/d3-scale/download/d3-scale-4.0.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fd3-scale%2Fdownload%2Fd3-scale-4.0.2.tgz#82b38e8e8ff7080764f8dcec77bd4be393689396"
+  integrity sha1-grOOjo/3CAdk+Nzsd71L45Nok5Y=
+  dependencies:
+    d3-array "2.10.0 - 3"
+    d3-format "1 - 3"
+    d3-interpolate "1.2.0 - 3"
+    d3-time "2.1.1 - 3"
+    d3-time-format "2 - 4"
+
 d3-selection@^3.0.0:
   version "3.0.0"
   resolved "https://registry.nlark.com/d3-selection/download/d3-selection-3.0.0.tgz#c25338207efa72cc5b9bd1458a1a41901f1e1b31"
   integrity sha1-wlM4IH76csxbm9FFihpBkB8eGzE=
+
+d3-shape@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.nlark.com/d3-shape/download/d3-shape-3.0.1.tgz#9ccdfb28fd9b0d12f2d8aec234cd5c4a9ea27931"
+  integrity sha1-nM37KP2bDRLy2K7CNM1cSp6ieTE=
+  dependencies:
+    d3-path "1 - 3"
+
+"d3-time-format@2 - 4":
+  version "4.0.0"
+  resolved "https://registry.nlark.com/d3-time-format/download/d3-time-format-4.0.0.tgz#930ded86a9de761702344760d8a25753467f28b7"
+  integrity sha1-kw3thqnedhcCNEdg2KJXU0Z/KLc=
+  dependencies:
+    d3-time "1 - 3"
+
+"d3-time@1 - 3", "d3-time@2.1.1 - 3":
+  version "3.0.0"
+  resolved "https://registry.nlark.com/d3-time/download/d3-time-3.0.0.tgz#65972cb98ae2d4954ef5c932e8704061335d4975"
+  integrity sha1-ZZcsuYri1JVO9cky6HBAYTNdSXU=
+  dependencies:
+    d3-array "2 - 3"
 
 "d3-timer@1 - 3":
   version "3.0.1"
@@ -6133,6 +6218,11 @@ internal-slot@^1.0.3:
     has "^1.0.3"
     side-channel "^1.0.4"
 
+"internmap@1 - 2":
+  version "2.0.3"
+  resolved "https://registry.nlark.com/internmap/download/internmap-2.0.3.tgz?cache=0&sync_timestamp=1632107515842&other_urls=https%3A%2F%2Fregistry.nlark.com%2Finternmap%2Fdownload%2Finternmap-2.0.3.tgz#6685f23755e43c524e251d29cbc97248e3061009"
+  integrity sha1-ZoXyN1XkPFJOJR0py8lySOMGEAk=
+
 ip-regex@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-2.1.0.tgz#fa78bf5d2e6913c911ce9f819ee5146bb6d844e9"
@@ -6459,7 +6549,7 @@ is-typedarray@^1.0.0, is-typedarray@~1.0.0:
 
 is-what@^3.12.0:
   version "3.14.1"
-  resolved "https://registry.npm.taobao.org/is-what/download/is-what-3.14.1.tgz?cache=0&sync_timestamp=1615169639418&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fis-what%2Fdownload%2Fis-what-3.14.1.tgz#e1222f46ddda85dead0fd1c9df131760e77755c1"
+  resolved "https://registry.npmmirror.com/is-what/download/is-what-3.14.1.tgz?cache=0&sync_timestamp=1634283398540&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fis-what%2Fdownload%2Fis-what-3.14.1.tgz#e1222f46ddda85dead0fd1c9df131760e77755c1"
   integrity sha1-4SIvRt3ahd6tD9HJ3xMXYOd3VcE=
 
 is-windows@^1.0.2:
@@ -7213,7 +7303,7 @@ less-loader@5.0.0:
     loader-utils "^1.1.0"
     pify "^4.0.1"
 
-less@^4.1.2:
+less@4.1.2:
   version "4.1.2"
   resolved "https://registry.npmmirror.com/less/download/less-4.1.2.tgz?cache=0&sync_timestamp=1633303807622&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fless%2Fdownload%2Fless-4.1.2.tgz#6099ee584999750c2624b65f80145f8674e4b4b0"
   integrity sha1-YJnuWEmZdQwmJLZfgBRfhnTktLA=
