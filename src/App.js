@@ -13,13 +13,10 @@ function App() {
   return (
     <div className="App">
       <Item>
-       <ForceGraphView />
+        <ForceGraphView />
       </Item>
       <Item>
         <PoetryFallsView />
-      </Item> 
-      <Item>
-        <WritePoetryView />
       </Item>
     </div>
   );

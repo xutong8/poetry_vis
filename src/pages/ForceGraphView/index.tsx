@@ -137,6 +137,7 @@ const ForceGraphView: React.FC<any> = () => {
     });
   };
 
+  // 绑定事件
   const bindEvents = () => {
     select('.force_svg')
       .select('.force_nodes')
@@ -154,6 +155,7 @@ const ForceGraphView: React.FC<any> = () => {
       });
   };
 
+  // 解除绑定
   const unbindEvents = () => {
     select('.force_svg')
       .select('.force_nodes')

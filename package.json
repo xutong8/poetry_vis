@@ -32,12 +32,9 @@
     "d3-force": "^3.0.0",
     "d3-scale": "^4.0.2",
     "d3-selection": "^3.0.0",
-<<<<<<< HEAD
     "d3-shape": "^3.0.1",
     "d3-transition": "^3.0.1",
-=======
     "d3-zoom": "^3.0.0",
->>>>>>> ec9d30d (feat: force bind zoom)
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "eslint": "^7.11.0",
@@ -174,12 +171,9 @@
     "@types/d3-force": "^3.0.3",
     "@types/d3-scale": "^4.0.2",
     "@types/d3-selection": "^3.0.1",
-<<<<<<< HEAD
     "@types/d3-shape": "^3.0.2",
     "@types/d3-transition": "^3.0.1",
-=======
     "@types/d3-zoom": "^3.0.1",
->>>>>>> ec9d30d (feat: force bind zoom)
     "@types/lodash": "^4.14.175",
     "@types/styled-components": "^5.1.15",
     "less": "4.1.2",
