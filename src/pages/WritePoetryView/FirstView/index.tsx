@@ -76,6 +76,10 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
       <div className="radar_container">
         <RadarChart radarDataSource={radarDataSource} setRadarDataSource={setRadarDataSource} />
       </div>
+      <div className="radar_buttons">
+        <button className="radar_button">系统生成</button>
+        <button className="radar_button">自由创作</button>
+      </div>
     </div>
   );
 };

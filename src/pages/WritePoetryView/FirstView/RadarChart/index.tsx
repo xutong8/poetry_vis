@@ -102,6 +102,7 @@ const RadarChart: React.FC<IRadarChartProps> = (props) => {
     const { x, y } = event;
     let newValue = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) / radius;
 
+    // 边界值检测，防止圆出界
     if (newValue > 1) {
       newValue = 1;
     } else if (newValue < 0) {
@@ -126,11 +127,13 @@ const RadarChart: React.FC<IRadarChartProps> = (props) => {
     select(circle).attr('cx', cx).attr('cy', cy);
   }
 
+  // 拖动end时触发
   function handleDragEnd() {
     const newData = dataRef.current;
     setRadarDataSource(newData);
   }
 
+  // 每次render，生成一个dragInstance
   const dragInstance = drag().on('drag', handleDrag).on('end', handleDragEnd) as any;
 
   // bind drag event
