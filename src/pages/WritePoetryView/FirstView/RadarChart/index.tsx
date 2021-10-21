@@ -1,11 +1,12 @@
 import { useElementSize } from '@/hooks/useElementSize';
+import { drag } from 'd3-drag';
 import { easeLinear } from 'd3-ease';
 import { scaleLinear, scaleOrdinal } from 'd3-scale';
-import { selectAll, select } from 'd3-selection';
+import { select } from 'd3-selection';
 import { curveCardinalClosed, lineRadial } from 'd3-shape';
 import { transition } from 'd3-transition';
 import { range } from 'lodash';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './index.less';
 
 export interface IItem {
@@ -13,21 +14,13 @@ export interface IItem {
   value: number;
 }
 
-const RadarChart: React.FC<any> = () => {
-  const data = [
-    // 蓝色
-    [
-      { axis: '思念远方', value: 0.22 },
-      { axis: '军旅悲壮', value: 0.6 },
-      { axis: '离别不舍', value: 0.8 }
-    ],
-    // 红色
-    [
-      { axis: '思念远方', value: 0.25 },
-      { axis: '军旅悲壮', value: 0.42 },
-      { axis: '离别不舍', value: 0.67 }
-    ]
-  ];
+export interface IRadarChartProps {
+  radarDataSource: IItem[][];
+  setRadarDataSource: (radarDataSource: IItem[][]) => void;
+}
+
+const RadarChart: React.FC<IRadarChartProps> = (props) => {
+  const { radarDataSource, setRadarDataSource } = props;
 
   // container ref
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,10 +31,11 @@ const RadarChart: React.FC<any> = () => {
   // color scale
   const color = scaleOrdinal<number, string>()
     .domain([0, 1])
-    .range(['rgb(0, 160, 176)', 'rgb(204, 51, 63)']);
+    // 红色、蓝色
+    .range(['rgb(204, 51, 63)', 'rgb(0, 160, 176)']);
 
   // 所有的坐标轴
-  const allAxis = data[0].map((item) => item.axis);
+  const allAxis = radarDataSource?.[0].map((item) => item.axis) ?? [];
   // 坐标轴的数量
   const axisTotal = allAxis.length;
   // 半径
@@ -61,8 +55,11 @@ const RadarChart: React.FC<any> = () => {
     .radius((d: any) => rScale(d.value))
     .angle((d: any, i: number) => i * angleSlice);
 
-  // 获取radar id
+  // 获取radar area id
   const getRadarAreaId = (groupIndex: number) => `radarArea_id${groupIndex}`;
+
+  // 获取radar stroke id
+  const getRadarStrokeId = (groupIndex: number) => `radarStroke_id${groupIndex}`;
 
   // factory function for generating transition instance
   const generateTransitionInstance = () => transition().ease(easeLinear) as any;
@@ -97,9 +94,66 @@ const RadarChart: React.FC<any> = () => {
       .attr('fill-opacity', 0.35);
   };
 
+  // data ref
+  const dataRef = useRef<IItem[][]>([]);
+
+  // handle drag event
+  function handleDrag(event: any) {
+    const { x, y } = event;
+    let newValue = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) / radius;
+
+    if (newValue > 1) {
+      newValue = 1;
+    } else if (newValue < 0) {
+      newValue = 0;
+    }
+
+    // @ts-ignore
+    const circle = this;
+    // eg: circle_0_1
+    const id_array = circle.id.split('_').slice(1);
+
+    const rowIdx = Number(id_array[0]);
+    const columnIdx = Number(id_array[1]);
+
+    const newData = JSON.parse(JSON.stringify(radarDataSource)) as IItem[][];
+    newData[rowIdx][columnIdx].value = newValue;
+    dataRef.current = newData;
+
+    const cx = rScale(newValue) * Math.cos(angleSlice * columnIdx - Math.PI / 2);
+    const cy = rScale(newValue) * Math.sin(angleSlice * columnIdx - Math.PI / 2);
+
+    select(circle).attr('cx', cx).attr('cy', cy);
+  }
+
+  function handleDragEnd() {
+    const newData = dataRef.current;
+    setRadarDataSource(newData);
+  }
+
+  const dragInstance = drag().on('drag', handleDrag).on('end', handleDragEnd) as any;
+
+  // bind drag event
+  const bindDragEventForCircle = () => {
+    select('.radar_chart_container')
+      .selectAll('.radarWrapper')
+      .selectAll('.radarCircle')
+      .call(dragInstance);
+  };
+
+  // unbind drag event
+  const unbindDragEventForCircle = () => {
+    dragInstance.on('drag', null).on('end', null);
+  };
+
+  useEffect(() => {
+    bindDragEventForCircle();
+    return () => unbindDragEventForCircle();
+  }, [radarDataSource, svgWidth, svgHeight]);
+
   return (
     <div className="radar_chart_container" ref={containerRef}>
-      <svg width={svgWidth} height={svgHeight} viewBox={`0 0 ${svgWidth} ${svgHeight}`}>
+      <svg width="100%" height="100%" viewBox={`0 0 ${svgWidth} ${svgHeight}`}>
         <g transform={`translate(${svgWidth / 2}, ${svgHeight / 2})`}>
           {/* 模糊 */}
           <defs>
@@ -141,14 +195,15 @@ const RadarChart: React.FC<any> = () => {
                 className="legend"
                 textAnchor="middle"
                 x={rScale(1.25) * Math.cos(angleSlice * index - Math.PI / 2)}
-                y={rScale(1.25) * Math.sin(angleSlice * index - Math.PI / 2)}
+                y={rScale(1.1) * Math.sin(angleSlice * index - Math.PI / 2)}
               >
                 {axis}
               </text>
             </g>
           ))}
-          {data.map((group: IItem[], groupIndex: number) => (
+          {radarDataSource.map((group: IItem[], groupIndex: number) => (
             <g className="radarWrapper" key={groupIndex}>
+              {/* draw radar area path */}
               <path
                 id={getRadarAreaId(groupIndex)}
                 className="radarArea"
@@ -158,6 +213,29 @@ const RadarChart: React.FC<any> = () => {
                 onMouseOver={() => handleMouseOver(groupIndex)}
                 onMouseOut={handleMouseOut}
               />
+              {/* draw stroke for radar area path */}
+              <path
+                id={getRadarStrokeId(groupIndex)}
+                className="radarStroke"
+                d={radarLine(group as any) as any}
+                strokeWidth="2"
+                stroke={color(groupIndex)}
+                fill="none"
+                filter="url(#glow)"
+              />
+              {/* append the circles */}
+              {group.map((item: IItem, itemIndex: number) => (
+                <circle
+                  key={itemIndex}
+                  className="radarCircle"
+                  id={`circle_${groupIndex}_${itemIndex}`}
+                  r="4"
+                  cx={rScale(item.value) * Math.cos(angleSlice * itemIndex - Math.PI / 2)}
+                  cy={rScale(item.value) * Math.sin(angleSlice * itemIndex - Math.PI / 2)}
+                  fill={color(groupIndex)}
+                  fillOpacity="0.8"
+                />
+              ))}
             </g>
           ))}
         </g>

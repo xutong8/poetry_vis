@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './index.less';
 import { emotions } from './constant';
-import { RadarChart } from './RadarChart';
+import { IItem, RadarChart } from './RadarChart';
 
 interface IFirstViewProps {
   sentenceSelected: number;
@@ -22,12 +22,31 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     '忧国忧民'
   ]);
 
+  // 生成雷达图数据
+  const generateRadarDataSource = (emotions: string[]) => {
+    return [
+      emotions.map((emotion) => ({ value: 0.5, axis: emotion })),
+      emotions.map((emotion) => ({ value: 0, axis: emotion }))
+    ];
+  };
+
   // 切换emotion
   const handleChangeEmotion = (emotion: string) => {
-    if (emotionsSelected.includes(emotion))
-      setEmotionsSelected(emotionsSelected.filter((temp) => temp !== emotion));
-    else setEmotionsSelected([...emotionsSelected, emotion]);
+    if (emotionsSelected.includes(emotion)) {
+      const newEmotionsSelected = emotionsSelected.filter((temp) => temp !== emotion);
+      setEmotionsSelected(newEmotionsSelected);
+      setRadarDataSource(generateRadarDataSource(newEmotionsSelected));
+    } else {
+      const newEmotionsSelected = [...emotionsSelected, emotion];
+      setEmotionsSelected(newEmotionsSelected);
+      setRadarDataSource(generateRadarDataSource(newEmotionsSelected));
+    }
   };
+
+  // radarChart dataSource
+  const [radarDataSource, setRadarDataSource] = useState<IItem[][]>(
+    generateRadarDataSource(emotionsSelected)
+  );
 
   return (
     <div className="first_view">
@@ -55,7 +74,7 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
         ))}
       </div>
       <div className="radar_container">
-        <RadarChart />
+        <RadarChart radarDataSource={radarDataSource} setRadarDataSource={setRadarDataSource} />
       </div>
     </div>
   );
