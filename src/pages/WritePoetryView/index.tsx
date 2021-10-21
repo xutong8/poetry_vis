@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import FirstView from './FirstView';
 import './index.less';
+import SecondView from './SecondView';
 
 const WritePoetryView: React.FC<any> = () => {
   // 定义一个state，用于区分当前选中的是五言 or 七言，默认为五言
@@ -18,7 +19,9 @@ const WritePoetryView: React.FC<any> = () => {
             setSentenceSelected={setSentenceSelected}
           />
         </div>
-        <div className="base_view"></div>
+        <div className="base_view">
+          <SecondView />
+        </div>
         <div className="base_view"></div>
       </div>
     </div>

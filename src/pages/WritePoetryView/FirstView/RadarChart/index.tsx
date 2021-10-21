@@ -139,7 +139,7 @@ const RadarChart: React.FC<IRadarChartProps> = (props) => {
   // bind drag event
   const bindDragEventForCircle = () => {
     select('.radar_chart_container')
-      .selectAll('.radarWrapper')
+      .select('.radarWrapper')
       .selectAll('.radarCircle')
       .call(dragInstance);
   };
