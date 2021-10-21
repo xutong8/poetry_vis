@@ -3,5 +3,8 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "stylelint.vscode-stylelint"
   }
 }

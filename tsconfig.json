@@ -20,7 +20,9 @@
     "paths": {
       "@/*": ["*"],
       "@/pages/*": ["pages/*"]
-    }
+    },
+    // json
+    "resolveJsonModule": true
   },
   // 包括
   "include": ["src", "**/*.ts", "**/*.tsx"],

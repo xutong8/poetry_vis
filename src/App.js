@@ -1,4 +1,5 @@
 import './App.less';
+import 'antd/dist/antd.css';
 import View1 from '@/pages/ForceGraphView';
 import View2 from '@/pages/WritePoetryView';
 import View3 from '@/pages/PoetryFallsView';

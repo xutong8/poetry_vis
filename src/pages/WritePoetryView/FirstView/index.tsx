@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import './index.less';
 import { emotions } from './constant';
 import { IItem, RadarChart } from './RadarChart';
+import { httpRequest } from '@/services';
 
 interface IFirstViewProps {
   sentenceSelected: number;
   setSentenceSelected: (sentenceSelected: number) => void;
+  setWords: (words: string[][]) => void;
 }
 
 const FirstView: React.FC<IFirstViewProps> = (props) => {
@@ -48,6 +50,11 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     generateRadarDataSource(emotionsSelected)
   );
 
+  // 点击系统生成按钮触发回调
+  const handleClick = () => {
+    httpRequest.get(`/mode_1/writePoems?emotion`, {}, false);
+  };
+
   return (
     <div className="first_view">
       <div className="title">句式选择</div>
@@ -77,7 +84,9 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
         <RadarChart radarDataSource={radarDataSource} setRadarDataSource={setRadarDataSource} />
       </div>
       <div className="radar_buttons">
-        <button className="radar_button">系统生成</button>
+        <button className="radar_button" onClick={handleClick}>
+          系统生成
+        </button>
       </div>
     </div>
   );

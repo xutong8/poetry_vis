@@ -9,6 +9,9 @@ const WritePoetryView: React.FC<any> = () => {
   // 定义一个state，用于区分当前选中的是五言 or 七言，默认为五言
   const [sentenceSelected, setSentenceSelected] = useState<number>(5);
 
+  // 定义word
+  const [words, setWords] = useState<string[][]>([]);
+
   return (
     <div className="write_poetry_container">
       <img src={write_poetry} className="img" />
@@ -17,6 +20,7 @@ const WritePoetryView: React.FC<any> = () => {
           <FirstView
             sentenceSelected={sentenceSelected}
             setSentenceSelected={setSentenceSelected}
+            setWords={setWords}
           />
         </div>
         <div className="base_view">
