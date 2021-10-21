@@ -1,8 +1,11 @@
 import { useElementSize } from '@/hooks/useElementSize';
+import { easeLinear } from 'd3-ease';
 import { scaleLinear, scaleOrdinal } from 'd3-scale';
+import { selectAll, select } from 'd3-selection';
 import { curveCardinalClosed, lineRadial } from 'd3-shape';
+import { transition } from 'd3-transition';
 import { range } from 'lodash';
-import React, { useMemo, useRef } from 'react';
+import React, { useRef } from 'react';
 import './index.less';
 
 export interface IItem {
@@ -15,8 +18,8 @@ const RadarChart: React.FC<any> = () => {
     // 蓝色
     [
       { axis: '思念远方', value: 0.22 },
-      { axis: '军旅悲壮', value: 0.4 },
-      { axis: '离别不舍', value: 0.5 }
+      { axis: '军旅悲壮', value: 0.6 },
+      { axis: '离别不舍', value: 0.8 }
     ],
     // 红色
     [
@@ -57,6 +60,42 @@ const RadarChart: React.FC<any> = () => {
     .curve(curveCardinalClosed)
     .radius((d: any) => rScale(d.value))
     .angle((d: any, i: number) => i * angleSlice);
+
+  // 获取radar id
+  const getRadarAreaId = (groupIndex: number) => `radarArea_id${groupIndex}`;
+
+  // factory function for generating transition instance
+  const generateTransitionInstance = () => transition().ease(easeLinear) as any;
+
+  // 处理mouseover事件
+  const handleMouseOver = (groupIndex: number) => {
+    const t1 = generateTransitionInstance();
+
+    select('.radar_chart_container')
+      .selectAll('.radarArea')
+      .transition(t1)
+      .duration(200)
+      .attr('fill-opacity', 0.1);
+
+    const t2 = generateTransitionInstance();
+
+    select('.radar_chart_container')
+      .select(`#${getRadarAreaId(groupIndex)}`)
+      .transition(t2)
+      .duration(200)
+      .attr('fill-opacity', 0.7);
+  };
+
+  // 处理mouseout事件
+  const handleMouseOut = () => {
+    const t = generateTransitionInstance();
+
+    select('.radar_chart_container')
+      .selectAll('.radarArea')
+      .transition(t)
+      .duration(200)
+      .attr('fill-opacity', 0.35);
+  };
 
   return (
     <div className="radar_chart_container" ref={containerRef}>
@@ -111,10 +150,13 @@ const RadarChart: React.FC<any> = () => {
           {data.map((group: IItem[], groupIndex: number) => (
             <g className="radarWrapper" key={groupIndex}>
               <path
+                id={getRadarAreaId(groupIndex)}
                 className="radarArea"
                 d={radarLine(group as any) as any}
                 fill={color(groupIndex)}
                 fillOpacity="0.35"
+                onMouseOver={() => handleMouseOver(groupIndex)}
+                onMouseOut={handleMouseOut}
               />
             </g>
           ))}
