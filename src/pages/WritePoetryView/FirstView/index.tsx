@@ -25,8 +25,8 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
   // 生成雷达图数据
   const generateRadarDataSource = (emotions: string[]) => {
     return [
-      emotions.map((emotion) => ({ value: 0.5, axis: emotion })),
-      emotions.map((emotion) => ({ value: 0, axis: emotion }))
+      emotions.map((emotion) => ({ value: 0, axis: emotion })),
+      emotions.map((emotion) => ({ value: 0.5, axis: emotion }))
     ];
   };
 

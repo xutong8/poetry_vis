@@ -31,8 +31,8 @@ const RadarChart: React.FC<IRadarChartProps> = (props) => {
   // color scale
   const color = scaleOrdinal<number, string>()
     .domain([0, 1])
-    // 红色、蓝色
-    .range(['rgb(204, 51, 63)', 'rgb(0, 160, 176)']);
+    // 蓝色、红色
+    .range(['rgb(0, 160, 176)', 'rgb(204, 51, 63)']);
 
   // 所有的坐标轴
   const allAxis = radarDataSource?.[0].map((item) => item.axis) ?? [];
