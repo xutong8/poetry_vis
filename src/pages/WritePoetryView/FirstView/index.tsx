@@ -90,14 +90,20 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     setWords(words);
   };
 
+  // 五言 or 七言 click事件
+  const handleChangeRhyme = (rhyme: Rhyme) => {
+    setSentenceSelected(rhyme);
+    setWords(generateWords(rhyme));
+  };
+
   return (
     <div className="first_view">
       <div className="title">句式选择</div>
       <div className="sentence_select">
-        <div className={`text ${getSentenceSelectCls(5)}`} onClick={() => setSentenceSelected(5)}>
+        <div className={`text ${getSentenceSelectCls(5)}`} onClick={() => handleChangeRhyme(5)}>
           五言绝句
         </div>
-        <div className={`text ${getSentenceSelectCls(7)}`} onClick={() => setSentenceSelected(7)}>
+        <div className={`text ${getSentenceSelectCls(7)}`} onClick={() => handleChangeRhyme(7)}>
           七言绝句
         </div>
       </div>
