@@ -87,7 +87,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
         </div>
       </div>
       <div className="share_buttons">
-        <button className="share_button">系统生成</button>
+        <button className="share_button">分享诗歌</button>
       </div>
     </div>
   );
