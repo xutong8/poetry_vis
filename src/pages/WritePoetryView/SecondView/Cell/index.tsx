@@ -1,6 +1,12 @@
 import React from 'react';
 import './index.less';
-import { first_rhythm, second_rhythm, third_rhythm, fourth_rhythm } from '@/assets/images';
+import {
+  first_rhythm,
+  second_rhythm,
+  third_rhythm,
+  fourth_rhythm,
+  empty_rhythm
+} from '@/assets/images';
 
 export enum Rhythm {
   ONE = 1,
@@ -29,7 +35,7 @@ const Cell: React.FC<ICellProps> = (props) => {
       case Rhythm.FOUR:
         return fourth_rhythm;
       default:
-        return first_rhythm;
+        return empty_rhythm;
     }
   };
 

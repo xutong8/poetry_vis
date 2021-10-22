@@ -8,7 +8,13 @@ import { computeRhythm } from '@/utils';
 
 const { Option } = Select;
 
-const SecondView = () => {
+export interface ISecondViewProps {
+  words: string[][];
+}
+
+const SecondView: React.FC<ISecondViewProps> = (props) => {
+  const { words } = props;
+
   // 选中的建议
   const [selectedSuggestion, setSelectedSuggestion] = useState<string>(DEFAULT_SUGGESTION);
 
@@ -16,14 +22,6 @@ const SecondView = () => {
   const handleSuggestionChange = (suggestion: string) => {
     setSelectedSuggestion(suggestion);
   };
-
-  // dataSource
-  const dataSource = [
-    ['烽', '烟', '今', '日', '暮'],
-    ['燕', '颔', '梦', '成', '眠'],
-    ['此', '地', '临', '河', '水'],
-    ['朝', '来', '见', '马', '鞍']
-  ];
 
   return (
     <div className="second_view">
@@ -53,11 +51,11 @@ const SecondView = () => {
         </div>
       </div>
       <div className="grids">
-        {dataSource.map((group, groupIndex: number) => {
+        {words.map((group, groupIndex: number) => {
           return (
             <div className="row" key={groupIndex}>
-              {group.map((item) => (
-                <Cell word={item} rhythm={1} key={item} />
+              {group.map((item, columnIndex: number) => (
+                <Cell word={item} rhythm={computeRhythm(item)} key={columnIndex} />
               ))}
             </div>
           );

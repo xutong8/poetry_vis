@@ -3,15 +3,17 @@ import './index.less';
 import { emotions } from './constant';
 import { IItem, RadarChart } from './RadarChart';
 import { httpRequest } from '@/services';
+import { Rhyme } from '..';
+import { generateWords } from '@/utils';
 
 interface IFirstViewProps {
-  sentenceSelected: number;
+  sentenceSelected: Rhyme;
   setSentenceSelected: (sentenceSelected: number) => void;
   setWords: (words: string[][]) => void;
 }
 
 const FirstView: React.FC<IFirstViewProps> = (props) => {
-  const { sentenceSelected, setSentenceSelected } = props;
+  const { sentenceSelected, setSentenceSelected, setWords } = props;
 
   const getSentenceSelectCls = (sentence: number) => {
     return sentenceSelected === sentence ? 'sentenceSelected' : '';
@@ -50,9 +52,42 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     generateRadarDataSource(emotionsSelected)
   );
 
+  // 生成emotion
+  const generateEmotion = () =>
+    emotions.map((emotion) => radarDataSource[1].find((item) => item.axis === emotion)?.value ?? 0);
+
+  // 五言 -> 2；七言 -> 0；
+  // 这里做一层映射；
+  const mappingForRhyme = (sentenceSelected: Rhyme) => {
+    switch (sentenceSelected) {
+      case Rhyme.FIVE_WORD:
+        return 2;
+      case Rhyme.SEVEN_WORD:
+        return 0;
+      default:
+        return 2;
+    }
+  };
+
   // 点击系统生成按钮触发回调
-  const handleClick = () => {
-    httpRequest.get(`/mode_1/writePoems?emotion`, {}, false);
+  const handleClick = async () => {
+    // 根据pingList随机生成yun
+    const pingList = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27];
+    const len = pingList.length;
+    const yun = pingList[Math.floor(Math.random() * len)];
+
+    // 发送请求
+    const { data } = await httpRequest.get(
+      `/mode_1/writePoems?emotion=${generateEmotion()}&rhyme=${mappingForRhyme(
+        sentenceSelected
+      )}&yun=${yun}`,
+      {},
+      false
+    );
+
+    // 修改words的状态
+    const words = data?.poem ?? generateWords(sentenceSelected);
+    setWords(words);
   };
 
   return (

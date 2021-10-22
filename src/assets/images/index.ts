@@ -7,6 +7,7 @@ import first_rhythm from './rhythms/first.svg';
 import second_rhythm from './rhythms/second.svg';
 import third_rhythm from './rhythms/third.svg';
 import fourth_rhythm from './rhythms/fourth.svg';
+import empty_rhythm from './rhythms/empty.svg';
 
 // 宣纸背景
 export { backgroundImage };
@@ -18,4 +19,4 @@ export { group_stars };
 export { write_poetry, write_poetry_box_background, small_pen };
 
 // 韵律
-export { first_rhythm, second_rhythm, third_rhythm, fourth_rhythm };
+export { first_rhythm, second_rhythm, third_rhythm, fourth_rhythm, empty_rhythm };

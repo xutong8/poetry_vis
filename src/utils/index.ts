@@ -1,8 +1,9 @@
-import { Rhythm } from '@/pages/WritePoetryView/SecondView/Cell';
 import { IEdge } from '@/types/force-graph';
 import map1 from '@/data/平水韵.json';
 import map2 from '@/data/韵母2声调.json';
+import { Rhyme } from '@/pages/WritePoetryView';
 
+// 计算力导向图link path
 export const computeForceLinkPath = (edge: IEdge) => {
   const sourceX = edge.source.x ?? 0;
   const sourceY = edge.source.y ?? 0;
@@ -16,7 +17,10 @@ export const computeForceLinkPath = (edge: IEdge) => {
           A ${dr} ${dr} 0 0 1 ${targetX} ${targetY}`;
 };
 
+// 计算韵律
 export const computeRhythm = (word: string) => {
+  if (!word) return;
+
   // 1. word在map1的value里面
   const map1Values = Object.values(map1);
   // 2. 找出value对应的key
@@ -26,4 +30,15 @@ export const computeRhythm = (word: string) => {
   ).slice(-3, -2);
 
   return (map2 as any)[map1Key];
+};
+
+// 根据五言 or 七言生成内容全是''的words
+export const generateWords = (rhyme: Rhyme) => {
+  const words = [];
+
+  for (let i = 0; i < 4; i++) {
+    words[i] = new Array(rhyme).fill('');
+  }
+
+  return words;
 };
