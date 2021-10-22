@@ -23,6 +23,12 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     setSelectedSuggestion(suggestion);
   };
 
+  // 撤销按钮的click事件
+  const reset = () => {};
+
+  // 恢复按钮的click事件
+  const restore = () => {};
+
   return (
     <div className="second_view">
       <div className="title">挥毫泼墨</div>
@@ -43,11 +49,15 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
         </div>
         <div className="reset">
           <ArrowLeftOutlined />
-          <span className="text">撤销</span>
+          <span className="text" onClick={reset}>
+            撤销
+          </span>
         </div>
         <div className="reset">
           <ArrowRightOutlined />
-          <span className="text">恢复</span>
+          <span className="text" onClick={restore}>
+            恢复
+          </span>
         </div>
       </div>
       <div className="grids">
