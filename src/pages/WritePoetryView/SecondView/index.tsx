@@ -5,15 +5,18 @@ import { DEFAULT_SUGGESTION, suggestions } from './constant';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import Cell from './Cell';
 import { computeRhythm } from '@/utils';
+import { SystemScore } from '..';
+import ScoreBoard from './ScoreBoard';
 
 const { Option } = Select;
 
 export interface ISecondViewProps {
   words: string[][];
+  systemScore: SystemScore;
 }
 
 const SecondView: React.FC<ISecondViewProps> = (props) => {
-  const { words } = props;
+  const { words, systemScore } = props;
 
   // 选中的建议
   const [selectedSuggestion, setSelectedSuggestion] = useState<string>(DEFAULT_SUGGESTION);
@@ -70,6 +73,21 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
             </div>
           );
         })}
+      </div>
+      <div className="system_score">
+        <span className="desc">系统评分</span>
+        <div className="board">
+          <ScoreBoard value={systemScore.continuity_score} desc="连贯" />
+        </div>
+        <div className="board">
+          <ScoreBoard value={systemScore.emotion_score} desc="情感" />
+        </div>
+        <div className="board">
+          <ScoreBoard value={systemScore.rhyme_score} desc="韵律" />
+        </div>
+      </div>
+      <div className="share_buttons">
+        <button className="share_button">系统生成</button>
       </div>
     </div>
   );

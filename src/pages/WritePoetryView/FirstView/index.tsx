@@ -3,17 +3,18 @@ import './index.less';
 import { emotions } from './constant';
 import { IItem, RadarChart } from './RadarChart';
 import { httpRequest } from '@/services';
-import { Rhyme } from '..';
+import { Rhyme, SystemScore } from '..';
 import { generateWords } from '@/utils';
 
 interface IFirstViewProps {
   sentenceSelected: Rhyme;
   setSentenceSelected: (sentenceSelected: number) => void;
   setWords: (words: string[][]) => void;
+  setSystemScore: (systemScore: SystemScore) => void;
 }
 
 const FirstView: React.FC<IFirstViewProps> = (props) => {
-  const { sentenceSelected, setSentenceSelected, setWords } = props;
+  const { sentenceSelected, setSentenceSelected, setWords, setSystemScore } = props;
 
   const getSentenceSelectCls = (sentence: number) => {
     return sentenceSelected === sentence ? 'sentenceSelected' : '';
@@ -76,8 +77,8 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     const len = pingList.length;
     const yun = pingList[Math.floor(Math.random() * len)];
 
-    // 发送请求
-    const { data } = await httpRequest.get(
+    // 发送writePoems请求
+    const { data: writePoemsData } = await httpRequest.get(
       `/mode_1/writePoems?emotion=${generateEmotion()}&rhyme=${mappingForRhyme(
         sentenceSelected
       )}&yun=${yun}`,
@@ -86,8 +87,28 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     );
 
     // 修改words的状态
-    const words = data?.poem ?? generateWords(sentenceSelected);
+    const words = writePoemsData?.poem ?? generateWords(sentenceSelected);
     setWords(words);
+
+    // poem参数数组
+    const poem = words.map((row: string[]) => row.join('')).join('|');
+
+    if (!words || words.length === 0) return;
+    // 发送analysePoems请求
+    const { data: analysePoemsData } = await httpRequest.get(
+      `/mode_1/analysePoem?emotion=${generateEmotion()}&rhyme=${mappingForRhyme(
+        sentenceSelected
+      )}&yun=${yun}&poem=${poem}`,
+      {},
+      false
+    );
+
+    const systemScore = {
+      continuity_score: analysePoemsData?.continuity_score ?? 0,
+      emotion_score: analysePoemsData?.emotion_score ?? 0,
+      rhyme_score: analysePoemsData?.rhyme_score ?? 0
+    } as SystemScore;
+    setSystemScore(systemScore);
   };
 
   // 五言 or 七言 click事件

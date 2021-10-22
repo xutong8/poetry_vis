@@ -11,12 +11,28 @@ export enum Rhyme {
   SEVEN_WORD = 7
 }
 
+export interface SystemScore {
+  // 连贯
+  continuity_score: number;
+  // 情感
+  emotion_score: number;
+  // 韵律
+  rhyme_score: number;
+}
+
 const WritePoetryView: React.FC<any> = () => {
   // 定义一个state，用于区分当前选中的是五言 or 七言，默认为五言
   const [sentenceSelected, setSentenceSelected] = useState<Rhyme>(Rhyme.FIVE_WORD);
 
-  // 定义word
+  // 定义words state
   const [words, setWords] = useState<string[][]>(generateWords(sentenceSelected));
+
+  // 定义系统评分system_score state
+  const [systemScore, setSystemScore] = useState<SystemScore>({
+    continuity_score: 0,
+    emotion_score: 0,
+    rhyme_score: 0
+  });
 
   return (
     <div className="write_poetry_container">
@@ -27,10 +43,11 @@ const WritePoetryView: React.FC<any> = () => {
             sentenceSelected={sentenceSelected}
             setSentenceSelected={setSentenceSelected}
             setWords={setWords}
+            setSystemScore={setSystemScore}
           />
         </div>
         <div className="base_view">
-          <SecondView words={words} />
+          <SecondView words={words} systemScore={systemScore} />
         </div>
         <div className="base_view"></div>
       </div>
