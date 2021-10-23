@@ -193,6 +193,7 @@ const RadarChart: React.FC<IRadarChartProps> = (props) => {
                 className="line"
                 stroke="white"
                 strokeWidth="2"
+                opacity="0.3"
               />
               <text
                 className="legend"
