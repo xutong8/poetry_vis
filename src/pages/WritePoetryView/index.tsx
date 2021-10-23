@@ -25,7 +25,12 @@ const WritePoetryView: React.FC<any> = () => {
   const [sentenceSelected, setSentenceSelected] = useState<Rhyme>(Rhyme.FIVE_WORD);
 
   // 定义words state
-  const [words, setWords] = useState<string[][]>(generateWords(sentenceSelected));
+  const [words, setWords] = useState<string[][]>([
+    ['烽', '烟', '今', '日', '暮'],
+    ['汉', '水', '几', '家', '还'],
+    ['寄', '语', '天', '涯', '月'],
+    ['依', '然', '忆', '故', '园']
+  ]);
 
   // 定义系统评分system_score state
   const [systemScore, setSystemScore] = useState<SystemScore>({

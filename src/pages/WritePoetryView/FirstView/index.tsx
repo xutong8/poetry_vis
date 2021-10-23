@@ -114,7 +114,6 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
   // 五言 or 七言 click事件
   const handleChangeRhyme = (rhyme: Rhyme) => {
     setSentenceSelected(rhyme);
-    setWords(generateWords(rhyme));
   };
 
   return (

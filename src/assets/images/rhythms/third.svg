@@ -8,8 +8,10 @@
     <path stroke="gray" stroke-width="1" stroke-dasharray="2,2" d="M0,3L90,3"></path>
   </g>
   <g>
-    <path stroke="black" stroke-width="1" d="M3,3L87,45"></path>
-    <circle r="2" fill="black" cx="3" cy="3"></circle>
-    <circle r="2" fill="black" cx="87" cy="45"></circle>
+    <path stroke="black" stroke-width="1" d="M3,34.5L24,45"></path>
+    <path stroke="black" stroke-width="1" d="M24,45L87,3"></path>
+    <circle r="2" fill="black" cx="3" cy="34.5"></circle>
+    <circle r="2" fill="black" cx="24" cy="45"></circle>
+    <circle r="2" fill="black" cx="87" cy="3"></circle>
   </g>
 </svg>
