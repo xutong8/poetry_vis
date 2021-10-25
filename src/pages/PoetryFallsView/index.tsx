@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { httpRequest } from '@/services';
 import Sentence from './components/sentence';
-import title from '@/assets/images/clip_article.png';
+import { clip_article } from '@/assets/images';
 import useWindowSize from '@/hooks/use-windows-size';
 import './index.less';
 
@@ -99,9 +99,7 @@ const PoetryFallsView: React.FC = () => {
 
   return (
     <div className="poetry-page">
-      <div>
-        <img className="title" src={title} alt="title" />
-      </div>
+      <img className="title" src={clip_article} alt="title" />
       <div>
         {poteryStages.map((elm, stage_index) => {
           const { poetries, z } = elm;

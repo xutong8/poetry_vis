@@ -8,6 +8,8 @@ import second_rhythm from './rhythms/second.svg';
 import third_rhythm from './rhythms/third.svg';
 import fourth_rhythm from './rhythms/fourth.svg';
 import empty_rhythm from './rhythms/empty.svg';
+import clip_article from './clip_article.png';
+import cloud_fly from './cloud_fly.png';
 
 // 宣纸背景
 export { backgroundImage };
@@ -20,3 +22,8 @@ export { write_poetry, write_poetry_box_background, small_pen };
 
 // 韵律
 export { first_rhythm, second_rhythm, third_rhythm, fourth_rhythm, empty_rhythm };
+// 裁章剪句
+export { clip_article };
+
+// 逸兴云飞
+export { cloud_fly };
