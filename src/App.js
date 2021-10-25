@@ -20,10 +20,10 @@ function App() {
         <PoetryFallsView />
       </Item>
       <Item>
-        <PoetryFallsView />
+        <WordCloudView />
       </Item>
       <Item>
-        <WordCloudView />
+        <WritePoetryView />
       </Item>
     </div>
   );
