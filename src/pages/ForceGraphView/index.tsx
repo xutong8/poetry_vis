@@ -7,6 +7,8 @@ import { backgroundImage, group_stars } from '@/assets/images';
 import { selectAll, select } from 'd3-selection';
 import { INode, IEdge, LinkType } from '@/types/force-graph';
 import { computeForceLinkPath } from '@/utils';
+import { zoom } from 'd3-zoom';
+
 interface IAuthor2Rank {
   [authorName: string]: number;
 }
@@ -135,6 +137,7 @@ const ForceGraphView: React.FC<any> = () => {
     });
   };
 
+  // 绑定事件
   const bindEvents = () => {
     select('.force_svg')
       .select('.force_nodes')
@@ -152,6 +155,7 @@ const ForceGraphView: React.FC<any> = () => {
       });
   };
 
+  // 解除绑定
   const unbindEvents = () => {
     select('.force_svg')
       .select('.force_nodes')
@@ -178,47 +182,68 @@ const ForceGraphView: React.FC<any> = () => {
     return () => unbindEvents();
   }, [minRank, maxRank, nodesState, edgesState]);
 
+  // svg ref
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // 处理zoom事件
+  const handleZoom = (event: any) => {
+    select('#graphRoot').attr('transform', event.transform);
+  };
+
+  useEffect(() => {
+    // 支持zoom交互
+    const customZoom = zoom().on('zoom', handleZoom) as any;
+    select(svgRef.current).call(customZoom);
+
+    return () => {
+      customZoom.on('zoom', null);
+      select(svgRef.current).call(customZoom);
+    };
+  }, []);
+
   return (
     <div className="force_container">
       <img src={group_stars} className="img" />
       <div className="force_content" ref={contentRef}>
-        <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="force_svg">
-          <g className="force_nodes">
-            {nodesState.map((node) => {
-              return (
-                <g className="force_node" key={node.name}>
-                  <circle
-                    className="force_circle"
-                    cx={node.x ? node.x + 15 : 0}
-                    cy={node.y ? node.y - 15 : 0}
-                    r={
-                      minRank !== maxRank
-                        ? ((node.rank - minRank) / (maxRank - minRank)) * 10 + 3
-                        : 0
-                    }
-                    fill={'#b77900'}
-                  />
-                  <text className="force_text" x={node.x} y={node.y} fill={'black'}>
-                    {node.name}
-                  </text>
-                </g>
-              );
-            })}
-          </g>
-          <g className="force_edges">
-            {edgesState
-              .filter((edge) => edge.link_type === 'social')
-              .map((edge: IEdge, index: number) => {
+        <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="force_svg" ref={svgRef}>
+          <g id="graphRoot">
+            <g className="force_nodes">
+              {nodesState.map((node) => {
                 return (
-                  <path
-                    className="force_edge"
-                    key={index}
-                    d={computeForceLinkPath(edge)}
-                    stroke="#b77900"
-                    fill="none"
-                  />
+                  <g className="force_node" key={node.name}>
+                    <circle
+                      className="force_circle"
+                      cx={node.x ? node.x + 15 : 0}
+                      cy={node.y ? node.y - 15 : 0}
+                      r={
+                        minRank !== maxRank
+                          ? ((node.rank - minRank) / (maxRank - minRank)) * 10 + 3
+                          : 0
+                      }
+                      fill={'#b77900'}
+                    />
+                    <text className="force_text" x={node.x} y={node.y} fill={'black'}>
+                      {node.name}
+                    </text>
+                  </g>
                 );
               })}
+            </g>
+            <g className="force_edges">
+              {edgesState
+                .filter((edge) => edge.link_type === 'social')
+                .map((edge: IEdge, index: number) => {
+                  return (
+                    <path
+                      className="force_edge"
+                      key={index}
+                      d={computeForceLinkPath(edge)}
+                      stroke="#b77900"
+                      fill="none"
+                    />
+                  );
+                })}
+            </g>
           </g>
         </svg>
       </div>
