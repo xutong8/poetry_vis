@@ -20,10 +20,11 @@ export interface ICellProps {
   word: string;
   rhythm: Rhythm;
   value: number;
+  stress_text: boolean;
 }
 
 const Cell: React.FC<ICellProps> = (props) => {
-  const { word, rhythm, value } = props;
+  const { word, rhythm, value, stress_text } = props;
 
   // 根据rhythm返回svg图片
   const getSVGByRhythm = (rhythm: Rhythm) => {
@@ -48,7 +49,8 @@ const Cell: React.FC<ICellProps> = (props) => {
           defaultValue={word}
           type="text"
           style={{
-            backgroundColor: value < THRESHOLD_VALUE ? 'rgba(255, 95, 95, 0.21)' : 'transparent'
+            backgroundColor: value < THRESHOLD_VALUE ? 'rgba(255, 95, 95, 0.21)' : 'transparent',
+            color: stress_text ? 'rgb(167, 22, 22)' : 'black'
           }}
         />
       </div>
