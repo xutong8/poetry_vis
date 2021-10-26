@@ -49,6 +49,7 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
   };
 
   // radarChart dataSource
+  // 第一个元素为实际效果；第二个元素为预期效果；
   const [radarDataSource, setRadarDataSource] = useState<IItem[][]>(
     generateRadarDataSource(emotionsSelected)
   );
@@ -109,6 +110,18 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
       rhyme_score: analysePoemsData?.rhyme_score ?? 0
     } as SystemScore;
     setSystemScore(systemScore);
+
+    // 拉取emotion data
+    const emotionValues = analysePoemsData?.emotion ?? [];
+    const computeActualRadarData = emotionsSelected.map((emotion) => {
+      const idx = emotions.indexOf(emotion);
+      return {
+        value: emotionValues?.[idx] ?? 0,
+        axis: emotion
+      };
+    });
+
+    setRadarDataSource([computeActualRadarData, radarDataSource[1]]);
   };
 
   // 五言 or 七言 click事件
