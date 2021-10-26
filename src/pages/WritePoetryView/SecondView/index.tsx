@@ -1,7 +1,14 @@
 import './index.less';
 import { Select } from 'antd';
-import { useState } from 'react';
-import { DEFAULT_SUGGESTION, suggestions } from './constant';
+import { useMemo, useState } from 'react';
+import {
+  CONTINUITY_SUGGESTION,
+  CONTINUITY_SUGGESTION_VALUE,
+  DEFAULT_SUGGESTION,
+  DEFAULT_SUGGESTION_VALUE,
+  RHYME_SUGGESTION_VALUE,
+  suggestions
+} from './constant';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import Cell from './Cell';
 import { computeRhythm } from '@/utils';
@@ -13,16 +20,18 @@ const { Option } = Select;
 export interface ISecondViewProps {
   words: string[][];
   systemScore: SystemScore;
+  rhymeList: number[][];
+  continuityList: number[][];
 }
 
 const SecondView: React.FC<ISecondViewProps> = (props) => {
-  const { words, systemScore } = props;
+  const { words, systemScore, rhymeList, continuityList } = props;
 
   // 选中的建议
-  const [selectedSuggestion, setSelectedSuggestion] = useState<string>(DEFAULT_SUGGESTION);
+  const [selectedSuggestion, setSelectedSuggestion] = useState<number>(DEFAULT_SUGGESTION_VALUE);
 
   // 处理Select Option改变的事件
-  const handleSuggestionChange = (suggestion: string) => {
+  const handleSuggestionChange = (suggestion: number) => {
     setSelectedSuggestion(suggestion);
   };
 
@@ -31,6 +40,17 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
 
   // 恢复按钮的click事件
   const restore = () => {};
+
+  const suggestionList = useMemo(() => {
+    switch (selectedSuggestion) {
+      case CONTINUITY_SUGGESTION_VALUE:
+        return continuityList;
+      case RHYME_SUGGESTION_VALUE:
+        return rhymeList;
+      default:
+        return [];
+    }
+  }, [selectedSuggestion, words.join('|')]);
 
   return (
     <div className="second_view">
@@ -44,8 +64,8 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
             onChange={handleSuggestionChange}
           >
             {suggestions.map((suggestion) => (
-              <Option value={suggestion} key={suggestion}>
-                {suggestion}
+              <Option value={suggestion.value} key={suggestion.text}>
+                {suggestion.text}
               </Option>
             ))}
           </Select>
@@ -68,7 +88,12 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
           return (
             <div className="row" key={groupIndex}>
               {group.map((item, columnIndex: number) => (
-                <Cell word={item} rhythm={computeRhythm(item)} key={columnIndex} />
+                <Cell
+                  word={item}
+                  rhythm={computeRhythm(item)}
+                  key={columnIndex}
+                  value={suggestionList?.[groupIndex]?.[columnIndex] ?? 1}
+                />
               ))}
             </div>
           );

@@ -11,10 +11,19 @@ interface IFirstViewProps {
   setSentenceSelected: (sentenceSelected: number) => void;
   setWords: (words: string[][]) => void;
   setSystemScore: (systemScore: SystemScore) => void;
+  setContinuityList: (continuityList: number[][]) => void;
+  setRhymeList: (rhymeList: number[][]) => void;
 }
 
 const FirstView: React.FC<IFirstViewProps> = (props) => {
-  const { sentenceSelected, setSentenceSelected, setWords, setSystemScore } = props;
+  const {
+    sentenceSelected,
+    setSentenceSelected,
+    setWords,
+    setSystemScore,
+    setContinuityList,
+    setRhymeList
+  } = props;
 
   const getSentenceSelectCls = (sentence: number) => {
     return sentenceSelected === sentence ? 'sentenceSelected' : '';
@@ -110,6 +119,14 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
       rhyme_score: analysePoemsData?.rhyme_score ?? 0
     } as SystemScore;
     setSystemScore(systemScore);
+
+    // 连贯建议
+    const continuity_list = analysePoemsData?.continuity_list ?? [];
+    setContinuityList(continuity_list);
+
+    // 韵律建议
+    const rhyme_list = analysePoemsData?.rhyme_list ?? [];
+    setRhymeList(rhyme_list);
 
     // 拉取emotion data
     const emotionValues = analysePoemsData?.emotion ?? [];

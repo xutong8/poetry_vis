@@ -7,6 +7,7 @@ import {
   fourth_rhythm,
   empty_rhythm
 } from '@/assets/images';
+import { THRESHOLD_VALUE } from '../constant';
 
 export enum Rhythm {
   ONE = 1,
@@ -18,10 +19,11 @@ export enum Rhythm {
 export interface ICellProps {
   word: string;
   rhythm: Rhythm;
+  value: number;
 }
 
 const Cell: React.FC<ICellProps> = (props) => {
-  const { word, rhythm } = props;
+  const { word, rhythm, value } = props;
 
   // 根据rhythm返回svg图片
   const getSVGByRhythm = (rhythm: Rhythm) => {
@@ -42,7 +44,13 @@ const Cell: React.FC<ICellProps> = (props) => {
   return (
     <div className="cell">
       <div className="grid">
-        <input defaultValue={word} type="text" />
+        <input
+          defaultValue={word}
+          type="text"
+          style={{
+            backgroundColor: value < THRESHOLD_VALUE ? 'rgba(255, 95, 95, 0.21)' : 'transparent'
+          }}
+        />
       </div>
       <div className="rhythm">
         <img src={getSVGByRhythm(rhythm)} />
