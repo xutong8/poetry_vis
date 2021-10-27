@@ -1,8 +1,9 @@
 import './App.less';
 import 'antd/dist/antd.css';
-import View1 from '@/pages/ForceGraphView';
-import View2 from '@/pages/WritePoetryView';
-import View3 from '@/pages/PoetryFallsView';
+import ForceGraphView from '@/pages/ForceGraphView';
+import WritePoetryView from '@/pages/WritePoetryView';
+import PoetryFallsView from '@/pages/PoetryFallsView';
+import WordCloudView from '@/pages/WordCloudView';
 import styled from 'styled-components';
 
 const Item = styled.div`
@@ -12,15 +13,18 @@ const Item = styled.div`
 function App() {
   return (
     <div className="App">
-      {/* <Item>
-        <View1 />
-      </Item> */}
       <Item>
-        <View2 />
+        <ForceGraphView />
       </Item>
-      {/* <Item>
-        <View3 />
-      </Item> */}
+      <Item>
+        <PoetryFallsView />
+      </Item>
+      <Item>
+        <WordCloudView />
+      </Item>
+      <Item>
+        <WritePoetryView />
+      </Item>
     </div>
   );
 }

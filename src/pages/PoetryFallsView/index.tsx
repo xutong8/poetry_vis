@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { httpRequest } from '@/services';
-import Sentence from './components/Sentence';
-import title from '@/assets/images/clip_article.png';
+import Sentence from './components/sentence';
+import { clip_article } from '@/assets/images';
 import useWindowSize from '@/hooks/use-windows-size';
 import './index.less';
 
@@ -32,7 +32,7 @@ const PoetryFallsView: React.FC = () => {
     };
 
     httpRequest.get('/getSomePoteries/').then((res) => {
-      let poetry_stagess = (res.data as any[]).map((arr: any[], index: number) => {
+      let poetry_stagess = (res.data as ResponseData).map((arr: any[], index: number) => {
         let poetries = arr.map((elm) => {
           const [id, content] = elm;
           const x = Math.random() * width, //*0.9+width*0.05,
@@ -99,9 +99,7 @@ const PoetryFallsView: React.FC = () => {
 
   return (
     <div className="poetry-page">
-      <div>
-        <img className="title" src={title} alt="title" />
-      </div>
+      <img className="title" src={clip_article} alt="title" />
       <div>
         {poteryStages.map((elm, stage_index) => {
           const { poetries, z } = elm;
