@@ -1902,6 +1902,7 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+<<<<<<< HEAD
 "@types/d3-array@*":
   version "3.0.2"
   resolved "https://registry.npmmirror.com/@types/d3-array/download/@types/d3-array-3.0.2.tgz#71c35bca8366a40d1b8fce9279afa4a77fb0065d"
@@ -1915,12 +1916,16 @@
     "@types/d3-selection" "*"
 
 "@types/d3-brush@*":
+=======
+"@types/d3-brush@^3.0.1":
+>>>>>>> feat_write_for_you
   version "3.0.1"
   resolved "https://registry.nlark.com/@types/d3-brush/download/@types/d3-brush-3.0.1.tgz#ae5f17ce391935ca88b29000e60ee20452c6357c"
   integrity sha1-rl8XzjkZNcqIspAA5g7iBFLGNXw=
   dependencies:
     "@types/d3-selection" "*"
 
+<<<<<<< HEAD
 "@types/d3-chord@*":
   version "3.0.1"
   resolved "https://registry.nlark.com/@types/d3-chord/download/@types/d3-chord-3.0.1.tgz?cache=0&sync_timestamp=1629707066237&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fd3-chord%2Fdownload%2F%40types%2Fd3-chord-3.0.1.tgz#54c8856c19c8e4ab36a53f73ba737de4768ad248"
@@ -1950,6 +1955,9 @@
   integrity sha1-obGK5foFWmc0yzvTy8YmDvGWduM=
 
 "@types/d3-drag@*", "@types/d3-drag@^3.0.1":
+=======
+"@types/d3-drag@^3.0.1":
+>>>>>>> feat_write_for_you
   version "3.0.1"
   resolved "https://registry.nlark.com/@types/d3-drag/download/@types/d3-drag-3.0.1.tgz#fb1e3d5cceeee4d913caa59dedf55c94cb66e80f"
   integrity sha1-+x49XM7u5NkTyqWd7fVclMtm6A8=
@@ -4538,7 +4546,11 @@ d3-delaunay@6:
   resolved "https://registry.nlark.com/d3-dispatch/download/d3-dispatch-3.0.1.tgz?cache=0&sync_timestamp=1622918261265&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fd3-dispatch%2Fdownload%2Fd3-dispatch-3.0.1.tgz#5fc75284e9c2375c36c839411a0cf550cbfc4d5e"
   integrity sha1-X8dShOnCN1w2yDlBGgz1UMv8TV4=
 
+<<<<<<< HEAD
 "d3-drag@2 - 3", d3-drag@3, d3-drag@^3.0.0:
+=======
+"d3-drag@2 - 3", d3-drag@^3.0.0:
+>>>>>>> feat_write_for_you
   version "3.0.0"
   resolved "https://registry.nlark.com/d3-drag/download/d3-drag-3.0.0.tgz#994aae9cd23c719f53b5e10e3a0a6108c69607ba"
   integrity sha1-mUqunNI8cZ9TteEOOgphCMaWB7o=

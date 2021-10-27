@@ -34,6 +34,11 @@ const WritePoetryView: React.FC<any> = () => {
     rhyme_score: 0
   });
 
+  // 连贯建议
+  const [continuityList, setContinuityList] = useState<number[][]>([]);
+  // 韵律建议
+  const [rhymeList, setRhymeList] = useState<number[][]>([]);
+
   return (
     <div className="write_poetry_container">
       <img src={write_poetry} className="img" />
@@ -44,10 +49,17 @@ const WritePoetryView: React.FC<any> = () => {
             setSentenceSelected={setSentenceSelected}
             setWords={setWords}
             setSystemScore={setSystemScore}
+            setContinuityList={setContinuityList}
+            setRhymeList={setRhymeList}
           />
         </div>
         <div className="base_view">
-          <SecondView words={words} systemScore={systemScore} />
+          <SecondView
+            words={words}
+            systemScore={systemScore}
+            rhymeList={rhymeList}
+            continuityList={continuityList}
+          />
         </div>
         <div className="base_view"></div>
       </div>
