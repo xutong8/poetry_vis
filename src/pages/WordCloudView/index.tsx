@@ -14,7 +14,6 @@ export interface Word {
 
 const WordCloudView: React.FC = () => {
   const [width, height] = useWindowSize();
-  console.log('size', width, height);
   const [data, setData] = useState<Word[]>([]);
 
   const getTotalValue = (data: Word[]) => data.reduce((total, elm) => total + elm.value, 0);

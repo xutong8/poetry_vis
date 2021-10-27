@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Word } from '..';
 import Constrainer from './constrainer';
 import WordElm from './word-elm';
