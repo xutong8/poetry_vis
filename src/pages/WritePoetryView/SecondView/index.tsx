@@ -1,6 +1,6 @@
 import './index.less';
 import { Select } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   CONTINUITY_SUGGESTION_VALUE,
   DEFAULT_SUGGESTION_VALUE,
@@ -71,6 +71,13 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     }
   }, [selectedSuggestion, words.join('|')]);
 
+  // 是否正在brushing
+  const brushingRef = useRef<boolean>(false);
+  // 获取brush
+  const brushRef = useRef<any>();
+  // dispatch
+  const brushDispatch = useRef<any>();
+
   // bind brush event
   useEffect(() => {
     const svg = document.getElementsByClassName('svg')[0] as SVGSVGElement;
@@ -98,12 +105,21 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
 
     // handle brush event
     function handleBrush(event: any) {
+      if (!event) return;
+
       const selection = event.selection;
-      if (selection && selection[0] === 0 && selection[1] === 0) return;
+
+      if (!selection) return;
+      if (selection[0] === 0 && selection[1] === 0) return;
 
       // @ts-ignore
       const eventTarget = this;
       const id = Number(eventTarget.id.slice(-1));
+
+      // 当前正在brush
+      brushingRef.current = true;
+
+      brushDispatch.current = event._;
 
       // 当前进行brush行为的行为id
       setBrushRow(id);
@@ -158,12 +174,15 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
 
     // handle brush end event
     function handleBrushEnd(event: any) {
-      const selection = event.selection;
-      if (selection && selection[0] === 0 && selection[1] === 0) return;
+      if (!event) return;
 
-      // @ts-ignore
-      const eventTarget = this;
-      select(eventTarget).call(event.target.move, [0, 0]);
+      const selection = event.selection;
+
+      if (!selection) return;
+      if (selection[0] === 0 && selection[1] === 0) return;
+
+      // brush结束
+      brushingRef.current = false;
     }
 
     // initilize brush instance
@@ -177,8 +196,27 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
 
     selectAll('.svg').selectAll('.gBrush').call(brush);
 
+    brushRef.current = brush;
+
     return () => {
       brush.on('brush', null).on('end', null);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleContextMenu = () => {
+      const isbrushing = brushingRef.current;
+      const brush = brushRef.current;
+
+      isbrushing && selectAll('.svg').selectAll('.gBrush').call(brush.move, [0, 0]);
+    };
+
+    // bind contextmenu event
+    document.addEventListener('contextmenu', handleContextMenu);
+
+    // unbind contextmenu event
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
     };
   }, []);
 
