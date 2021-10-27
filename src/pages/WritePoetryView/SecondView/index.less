@@ -61,12 +61,14 @@
       position: relative;
     }
 
+    @offset_x: 55px;
+
     .svg {
       position: absolute;
       z-index: 1;
-      left: -10px;
+      left: -@offset_x;
       top: -10px;
-      width: calc(100% + 20px);
+      width: calc(100% + @offset_x * 2);
       height: 65px;
     }
 

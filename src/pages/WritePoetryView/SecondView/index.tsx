@@ -68,6 +68,9 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     const svgWidth = boundingRect.width;
     const svgHeight = boundingRect.height;
 
+    // 和index.less中@left对应
+    const offsetX = 55;
+
     // get gaps by evey cell
     const row = document.getElementsByClassName('row')[0];
     // row距离屏幕left距离
@@ -77,7 +80,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     const cells = row.getElementsByClassName('cell');
     Array.from(cells).forEach((cell) => {
       const cellBoundingRect = cell.getBoundingClientRect();
-      const cellLeft = cellBoundingRect.left - rowLeft + 10;
+      const cellLeft = cellBoundingRect.left - rowLeft + offsetX;
       gaps.push([cellLeft, cellLeft + cellBoundingRect.width]);
     });
 
@@ -155,7 +158,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     const brush = brushX()
       .extent([
         [0, 0],
-        [svgWidth + 20, svgHeight + 20]
+        [svgWidth, svgHeight]
       ])
       .on('brush', handleBrush)
       .on('end', handleBrushEnd) as any;
