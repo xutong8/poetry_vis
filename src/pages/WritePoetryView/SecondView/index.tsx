@@ -68,7 +68,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     const svgWidth = boundingRect.width;
     const svgHeight = boundingRect.height;
 
-    // 和index.less中@left对应
+    // 和index.less中@offset_x对应
     const offsetX = 55;
 
     // get gaps by evey cell
