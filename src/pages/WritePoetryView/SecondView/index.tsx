@@ -163,7 +163,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     selectAll('.svg').selectAll('.gBrush').call(brush);
 
     return () => {
-      brush.on('brush', null);
+      brush.on('brush', null).on('end', null);
     };
   }, []);
 
