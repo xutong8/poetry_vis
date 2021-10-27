@@ -13,6 +13,9 @@ interface IFirstViewProps {
   setSystemScore: (systemScore: SystemScore) => void;
   setContinuityList: (continuityList: number[][]) => void;
   setRhymeList: (rhymeList: number[][]) => void;
+  setBrushRow: (brushRow: number) => void;
+  setBrushLeft: (brushLeft: number) => void;
+  setBrushRight: (brushRight: number) => void;
 }
 
 const FirstView: React.FC<IFirstViewProps> = (props) => {
@@ -22,7 +25,10 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     setWords,
     setSystemScore,
     setContinuityList,
-    setRhymeList
+    setRhymeList,
+    setBrushRow,
+    setBrushLeft,
+    setBrushRight
   } = props;
 
   const getSentenceSelectCls = (sentence: number) => {
@@ -139,6 +145,11 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     });
 
     setRadarDataSource([computeActualRadarData, radarDataSource[1]]);
+
+    // 清空brush
+    setBrushRow(-1);
+    setBrushLeft(-1);
+    setBrushRight(-1);
   };
 
   // 五言 or 七言 click事件

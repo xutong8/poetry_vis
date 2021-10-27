@@ -39,6 +39,11 @@ const WritePoetryView: React.FC<any> = () => {
   // 韵律建议
   const [rhymeList, setRhymeList] = useState<number[][]>([]);
 
+  // 当前在第几行brush
+  const [brushRow, setBrushRow] = useState<number>(-1);
+  const [brushLeft, setBrushLeft] = useState<number>(-1);
+  const [brushRight, setBrushRight] = useState<number>(-1);
+
   return (
     <div className="write_poetry_container">
       <img src={write_poetry} className="img" />
@@ -51,6 +56,9 @@ const WritePoetryView: React.FC<any> = () => {
             setSystemScore={setSystemScore}
             setContinuityList={setContinuityList}
             setRhymeList={setRhymeList}
+            setBrushRow={setBrushRow}
+            setBrushLeft={setBrushLeft}
+            setBrushRight={setBrushRight}
           />
         </div>
         <div className="base_view">
@@ -59,6 +67,12 @@ const WritePoetryView: React.FC<any> = () => {
             systemScore={systemScore}
             rhymeList={rhymeList}
             continuityList={continuityList}
+            brushRow={brushRow}
+            setBrushRow={setBrushRow}
+            brushLeft={brushLeft}
+            setBrushLeft={setBrushLeft}
+            brushRight={brushRight}
+            setBrushRight={setBrushRight}
           />
         </div>
         <div className="base_view"></div>

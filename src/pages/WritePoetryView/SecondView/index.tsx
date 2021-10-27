@@ -24,10 +24,27 @@ export interface ISecondViewProps {
   systemScore: SystemScore;
   rhymeList: number[][];
   continuityList: number[][];
+  brushRow: number;
+  setBrushRow: (brushRow: number) => void;
+  brushLeft: number;
+  setBrushLeft: (brushLeft: number) => void;
+  brushRight: number;
+  setBrushRight: (brushRight: number) => void;
 }
 
 const SecondView: React.FC<ISecondViewProps> = (props) => {
-  const { words, systemScore, rhymeList, continuityList } = props;
+  const {
+    words,
+    systemScore,
+    rhymeList,
+    continuityList,
+    brushRow,
+    setBrushRow,
+    brushLeft,
+    setBrushLeft,
+    brushRight,
+    setBrushRight
+  } = props;
 
   // 选中的建议
   const [selectedSuggestion, setSelectedSuggestion] = useState<number>(DEFAULT_SUGGESTION_VALUE);
@@ -36,11 +53,6 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
   const handleSuggestionChange = (suggestion: number) => {
     setSelectedSuggestion(suggestion);
   };
-
-  // 当前在第几行brush
-  const [brushRow, setBrushRow] = useState<number>(-1);
-  const [brushLeft, setBrushLeft] = useState<number>(-1);
-  const [brushRight, setBrushRight] = useState<number>(-1);
 
   // 撤销按钮的click事件
   const reset = () => {};
