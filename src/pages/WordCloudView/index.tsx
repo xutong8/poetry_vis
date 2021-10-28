@@ -17,11 +17,11 @@ const WordCloudView: React.FC = () => {
   const [data, setData] = useState<Word[]>([]);
 
   const getTotalValue = (data: Word[]) => data.reduce((total, elm) => total + elm.value, 0);
+
   /**
    * 处理数据
    * @param data 服务端返回的数据
    */
-
   const handleResponseData = (data: ResponseData) => {
     // 数组转为对象数组
     const newData: Word[] = data.map((elm) => {

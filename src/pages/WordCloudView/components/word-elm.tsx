@@ -46,7 +46,7 @@ class WordElm {
   // 可以再加个bounding
 
   // ture撞上了
-  collisionDetect(other_elm: any) {
+  collisionDetect(other_elm: WordElm) {
     // 有没有撞上其他的东西
     const coll_other_text =
       rangeCollisionDetect(this.getRangeX(), other_elm.getRangeX()) &&

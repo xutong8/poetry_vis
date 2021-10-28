@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { httpRequest } from '@/services';
-import Sentence from './components/Sentence';
+import Sentence from './components/sentence';
 import { clip_article } from '@/assets/images';
 import useWindowSize from '@/hooks/use-windows-size';
 import './index.less';
@@ -95,7 +95,7 @@ const PoetryFallsView: React.FC = () => {
 
   useEffect(() => {
     addPoetries();
-  }, []);
+  }, [width, height]);
 
   return (
     <div className="poetry-page">
