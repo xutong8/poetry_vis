@@ -208,6 +208,11 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
       const isbrushing = brushingRef.current;
       const brush = brushRef.current;
 
+      // Fix: 此时还需要清空刷选状态
+      setBrushLeft(-1);
+      setBrushRight(-1);
+      setBrushRow(-1);
+
       isbrushing && selectAll('.svg').selectAll('.gBrush').call(brush.move, [0, 0]);
     };
 
