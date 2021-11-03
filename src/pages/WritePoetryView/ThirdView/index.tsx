@@ -154,14 +154,36 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
 
                 // TODO: 添加交互
                 return (
-                  <path
-                    opacity="0.1"
-                    key={index}
-                    d={line1 + line2}
-                    fill="none"
-                    stroke="grey"
-                    strokeWidth="2.5"
-                  />
+                  <g key={index}>
+                    <path
+                      opacity="0.1"
+                      d={line1 + line2}
+                      fill="none"
+                      stroke="grey"
+                      strokeWidth="2.5"
+                    />
+                    <circle
+                      cx={continuity_point[0]}
+                      cy={continuity_point[1]}
+                      r="3"
+                      fill="grey"
+                      opacity="0.5"
+                    />
+                    <circle
+                      cx={emotion_point[0]}
+                      cy={emotion_point[1]}
+                      r="3"
+                      fill="grey"
+                      opacity="0.5"
+                    />
+                    <circle
+                      cx={rhyme_point[0]}
+                      cy={rhyme_point[1]}
+                      r="3"
+                      fill="grey"
+                      opacity="0.5"
+                    />
+                  </g>
                 );
               })}
             </g>
