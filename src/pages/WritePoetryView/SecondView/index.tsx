@@ -16,7 +16,7 @@ import { brushX } from 'd3-brush';
 import { select, selectAll } from 'd3-selection';
 import { range } from 'lodash';
 import { httpRequest } from '@/services';
-import { mappingForRhyme } from '@/utils';
+import { mappingForRhyme, generateMarker } from '@/utils';
 
 const { Option } = Select;
 
@@ -84,10 +84,18 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
   const brushRef = useRef<any>();
   // dispatch
   const brushDispatch = useRef<any>();
+  // brushRow ref
+  const brushRowRef = useRef<number>(-1);
   // brushLeft ref
   const brushLeftRef = useRef<number>(-1);
   // brushRight ref
   const brushRightRef = useRef<number>(-1);
+
+  const wordsRef = useRef<string[][]>([]);
+
+  useEffect(() => {
+    wordsRef.current = words;
+  }, [words.join('')]);
 
   // bind brush event
   useEffect(() => {
@@ -133,6 +141,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
       brushDispatch.current = event._;
 
       // 当前进行brush行为的行为id
+      brushRowRef.current = id;
       setBrushRow(id);
 
       // 清空其他行的brush
@@ -198,21 +207,43 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
       // brush结束
       brushingRef.current = false;
 
-      // 最新的latest brush left
+      // 最新的brush row
+      const latestBrushRow = brushRowRef.current;
+      // 最新的brush left
       const latestBrushLeft = brushLeftRef.current;
-      // 最新的latest brush right
+      // 最新的brush right
       const latestBrushRight = brushRightRef.current;
+      // 最新的words
+      const latestWords = wordsRef.current;
 
       // poem参数数组
-      const poem = words.map((row: string[]) => row.join('')).join('|');
+      const poem = latestWords.map((row: string[]) => row.join('')).join('|');
+
+      // 根据pingList随机生成yun
+      const pingList = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27];
+      const len = pingList.length;
+      const yun = pingList[Math.floor(Math.random() * len)];
 
       // brush刷选完后，发送getCandidate请求
       if (latestBrushLeft !== -1 || latestBrushRight !== -1) {
-        httpRequest.get(
-          `/mode_1/getCandidates?emotion=${JSON.stringify(
-            generateEmotion().join(',')
-          )}&poem=${poem}&rhyme=${mappingForRhyme(sentenceSelected)}&`
-        );
+        httpRequest
+          .get(
+            `/mode_1/getCandidates?emotion=${generateEmotion().join(
+              ','
+            )}&poem=${poem}&rhyme=${mappingForRhyme(
+              sentenceSelected
+            )}&yun=${yun}&marker=${generateMarker(
+              latestWords,
+              latestBrushRow,
+              latestBrushLeft,
+              latestBrushRight
+            )}`,
+            {},
+            false
+          )
+          .then((res) => {
+            console.log('res: ', res);
+          });
       }
     }
 

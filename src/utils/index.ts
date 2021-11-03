@@ -63,3 +63,21 @@ export const generateRadarDataSource = (emotions: string[]) => {
     emotions.map((emotion) => ({ value: 0.5, axis: emotion }))
   ];
 };
+
+// 生成marker
+export const generateMarker = (words: string[][], row: number, left: number, right: number) => {
+  return words
+    .map((rowGroup: string[], rowIndex: number) => {
+      const len = rowGroup.length;
+      const arr = new Array(len).fill(0);
+
+      if (rowIndex === row) {
+        for (let i = left; i <= right; i++) {
+          arr[i] = 1;
+        }
+      }
+
+      return arr.join(',');
+    })
+    .join('|');
+};
