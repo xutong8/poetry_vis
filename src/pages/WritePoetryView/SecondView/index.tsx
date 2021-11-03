@@ -10,12 +10,13 @@ import {
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import Cell from './Cell';
 import { computeRhythm } from '@/utils';
-import { SystemScore } from '..';
+import { Candidate, Rhyme, SystemScore } from '..';
 import ScoreBoard from './ScoreBoard';
 import { brushX } from 'd3-brush';
 import { select, selectAll } from 'd3-selection';
-import { scaleLinear } from 'd3-scale';
 import { range } from 'lodash';
+import { httpRequest } from '@/services';
+import { mappingForRhyme } from '@/utils';
 
 const { Option } = Select;
 
@@ -30,6 +31,9 @@ export interface ISecondViewProps {
   setBrushLeft: (brushLeft: number) => void;
   brushRight: number;
   setBrushRight: (brushRight: number) => void;
+  setCandidates: (candidates: Candidate[]) => void;
+  generateEmotion: () => number[];
+  sentenceSelected: Rhyme;
 }
 
 const SecondView: React.FC<ISecondViewProps> = (props) => {
@@ -43,7 +47,10 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     brushLeft,
     setBrushLeft,
     brushRight,
-    setBrushRight
+    setBrushRight,
+    setCandidates,
+    generateEmotion,
+    sentenceSelected
   } = props;
 
   // 选中的建议
@@ -77,6 +84,10 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
   const brushRef = useRef<any>();
   // dispatch
   const brushDispatch = useRef<any>();
+  // brushLeft ref
+  const brushLeftRef = useRef<number>(-1);
+  // brushRight ref
+  const brushRightRef = useRef<number>(-1);
 
   // bind brush event
   useEffect(() => {
@@ -168,7 +179,10 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
         r = -1;
       }
 
+      brushLeftRef.current = l;
       setBrushLeft(l);
+
+      brushRightRef.current = r;
       setBrushRight(r);
     }
 
@@ -183,6 +197,23 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
 
       // brush结束
       brushingRef.current = false;
+
+      // 最新的latest brush left
+      const latestBrushLeft = brushLeftRef.current;
+      // 最新的latest brush right
+      const latestBrushRight = brushRightRef.current;
+
+      // poem参数数组
+      const poem = words.map((row: string[]) => row.join('')).join('|');
+
+      // brush刷选完后，发送getCandidate请求
+      if (latestBrushLeft !== -1 || latestBrushRight !== -1) {
+        httpRequest.get(
+          `/mode_1/getCandidates?emotion=${JSON.stringify(
+            generateEmotion().join(',')
+          )}&poem=${poem}&rhyme=${mappingForRhyme(sentenceSelected)}&`
+        );
+      }
     }
 
     // initilize brush instance

@@ -11,7 +11,7 @@ const ScoreBoard: React.FC<IScoreBoardProps> = (props) => {
 
   return (
     <div className="score_board">
-      <div className="score_value">{value.toFixed(1)}分</div>
+      <div className="score_value">{value?.toFixed(1)}分</div>
       <div className="score_desc">{desc}</div>
     </div>
   );

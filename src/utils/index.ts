@@ -42,3 +42,24 @@ export const generateWords = (rhyme: Rhyme) => {
 
   return words;
 };
+
+// 五言 -> 2；七言 -> 0；
+// 这里做一层映射；
+export const mappingForRhyme = (sentenceSelected: Rhyme) => {
+  switch (sentenceSelected) {
+    case Rhyme.FIVE_WORD:
+      return 2;
+    case Rhyme.SEVEN_WORD:
+      return 0;
+    default:
+      return 2;
+  }
+};
+
+// 生成雷达图数据
+export const generateRadarDataSource = (emotions: string[]) => {
+  return [
+    emotions.map((emotion) => ({ value: 0, axis: emotion })),
+    emotions.map((emotion) => ({ value: 0.5, axis: emotion }))
+  ];
+};
