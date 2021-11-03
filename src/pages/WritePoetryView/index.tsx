@@ -8,6 +8,7 @@ import './index.less';
 import SecondView from './SecondView';
 import { emotions } from './FirstView/constant';
 import { generateRadarDataSource } from '@/utils';
+import ThirdView from './ThirdView';
 
 export enum Rhyme {
   FIVE_WORD = 5,
@@ -122,7 +123,18 @@ const WritePoetryView: React.FC<any> = () => {
             sentenceSelected={sentenceSelected}
           />
         </div>
-        {candidates && candidates.length !== 0 ? <div className="base_view"></div> : null}
+        {candidates && candidates.length !== 0 ? (
+          <div className="base_view">
+            <ThirdView
+              candidates={candidates}
+              brushLeft={brushLeft}
+              brushRight={brushRight}
+              brushRow={brushRow}
+              words={words}
+              setWords={setWords}
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );

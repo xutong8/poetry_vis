@@ -99,6 +99,9 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
 
   // bind brush event
   useEffect(() => {
+    if (!words) return;
+    if (words && words[0] && words[0][0] === '') return;
+
     const svg = document.getElementsByClassName('svg')[0] as SVGSVGElement;
     // get bounding rect
     const boundingRect = svg.getBoundingClientRect();
@@ -107,7 +110,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     const svgHeight = boundingRect.height;
 
     // 和index.less中@offset_x对应
-    const offsetX = 55;
+    const offsetX = Number(getComputedStyle(svg, null).getPropertyValue('left').slice(1, -2));
 
     // get gaps by evey cell
     const row = document.getElementsByClassName('row')[0];
@@ -207,6 +210,8 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
       // brush结束
       brushingRef.current = false;
 
+      selectAll('.svg').selectAll('.gBrush').call(brush.move, [0, 0]);
+
       // 最新的brush row
       const latestBrushRow = brushRowRef.current;
       // 最新的brush left
@@ -242,7 +247,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
             false
           )
           .then((res) => {
-            console.log('res: ', res);
+            setCandidates((res?.data ?? []) as Candidate[]);
           });
       }
     }
@@ -263,7 +268,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     return () => {
       brush.on('brush', null).on('end', null);
     };
-  }, []);
+  }, [words.join('')]);
 
   useEffect(() => {
     const handleContextMenu = () => {
