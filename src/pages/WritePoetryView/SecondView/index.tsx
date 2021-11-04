@@ -1,6 +1,6 @@
 import './index.less';
 import { Select } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   CONTINUITY_SUGGESTION_VALUE,
   DEFAULT_SUGGESTION_VALUE,
@@ -10,12 +10,13 @@ import {
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import Cell from './Cell';
 import { computeRhythm } from '@/utils';
-import { SystemScore } from '..';
+import { Candidate, Rhyme, SystemScore } from '..';
 import ScoreBoard from './ScoreBoard';
 import { brushX } from 'd3-brush';
 import { select, selectAll } from 'd3-selection';
-import { scaleLinear } from 'd3-scale';
 import { range } from 'lodash';
+import { httpRequest } from '@/services';
+import { mappingForRhyme, generateMarker } from '@/utils';
 
 const { Option } = Select;
 
@@ -30,6 +31,10 @@ export interface ISecondViewProps {
   setBrushLeft: (brushLeft: number) => void;
   brushRight: number;
   setBrushRight: (brushRight: number) => void;
+  setCandidates: (candidates: Candidate[]) => void;
+  generateEmotion: () => number[];
+  sentenceSelected: Rhyme;
+  setCandidateIndex: (candidateIndex: number) => void;
 }
 
 const SecondView: React.FC<ISecondViewProps> = (props) => {
@@ -43,7 +48,11 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     brushLeft,
     setBrushLeft,
     brushRight,
-    setBrushRight
+    setBrushRight,
+    setCandidates,
+    generateEmotion,
+    sentenceSelected,
+    setCandidateIndex
   } = props;
 
   // 选中的建议
@@ -71,8 +80,30 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     }
   }, [selectedSuggestion, words.join('|')]);
 
+  // 是否正在brushing
+  const brushingRef = useRef<boolean>(false);
+  // 获取brush
+  const brushRef = useRef<any>();
+  // dispatch
+  const brushDispatch = useRef<any>();
+  // brushRow ref
+  const brushRowRef = useRef<number>(-1);
+  // brushLeft ref
+  const brushLeftRef = useRef<number>(-1);
+  // brushRight ref
+  const brushRightRef = useRef<number>(-1);
+
+  const wordsRef = useRef<string[][]>([]);
+
+  useEffect(() => {
+    wordsRef.current = words;
+  }, [words.join('')]);
+
   // bind brush event
   useEffect(() => {
+    if (!words) return;
+    if (words && words[0] && words[0][0] === '') return;
+
     const svg = document.getElementsByClassName('svg')[0] as SVGSVGElement;
     // get bounding rect
     const boundingRect = svg.getBoundingClientRect();
@@ -81,7 +112,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     const svgHeight = boundingRect.height;
 
     // 和index.less中@offset_x对应
-    const offsetX = 55;
+    const offsetX = Number(getComputedStyle(svg, null).getPropertyValue('left').slice(1, -2));
 
     // get gaps by evey cell
     const row = document.getElementsByClassName('row')[0];
@@ -98,14 +129,24 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
 
     // handle brush event
     function handleBrush(event: any) {
+      if (!event) return;
+
       const selection = event.selection;
-      if (selection && selection[0] === 0 && selection[1] === 0) return;
+
+      if (!selection) return;
+      if (selection[0] === 0 && selection[1] === 0) return;
 
       // @ts-ignore
       const eventTarget = this;
       const id = Number(eventTarget.id.slice(-1));
 
+      // 当前正在brush
+      brushingRef.current = true;
+
+      brushDispatch.current = event._;
+
       // 当前进行brush行为的行为id
+      brushRowRef.current = id;
       setBrushRow(id);
 
       // 清空其他行的brush
@@ -152,18 +193,74 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
         r = -1;
       }
 
+      brushLeftRef.current = l;
       setBrushLeft(l);
+
+      brushRightRef.current = r;
       setBrushRight(r);
     }
 
     // handle brush end event
     function handleBrushEnd(event: any) {
-      const selection = event.selection;
-      if (selection && selection[0] === 0 && selection[1] === 0) return;
+      if (!event) return;
 
-      // @ts-ignore
-      const eventTarget = this;
-      select(eventTarget).call(event.target.move, [0, 0]);
+      const selection = event.selection;
+
+      if (!selection) return;
+      if (selection[0] === 0 && selection[1] === 0) return;
+
+      // brush结束
+      brushingRef.current = false;
+
+      selectAll('.svg').selectAll('.gBrush').call(brush.move, [0, 0]);
+
+      // 最新的brush row
+      const latestBrushRow = brushRowRef.current;
+      // 最新的brush left
+      const latestBrushLeft = brushLeftRef.current;
+      // 最新的brush right
+      const latestBrushRight = brushRightRef.current;
+      // 最新的words
+      const latestWords = wordsRef.current;
+
+      // poem参数数组
+      const poem = latestWords.map((row: string[]) => row.join('')).join('|');
+
+      // 根据pingList随机生成yun
+      const pingList = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27];
+      const len = pingList.length;
+      const yun = pingList[Math.floor(Math.random() * len)];
+
+      // brush刷选完后，发送getCandidate请求
+      if (latestBrushLeft !== -1 || latestBrushRight !== -1) {
+        httpRequest
+          .get(
+            `/mode_1/getCandidates?emotion=${generateEmotion().join(
+              ','
+            )}&poem=${poem}&rhyme=${mappingForRhyme(
+              sentenceSelected
+            )}&yun=${yun}&marker=${generateMarker(
+              latestWords,
+              latestBrushRow,
+              latestBrushLeft,
+              latestBrushRight
+            )}`,
+            {},
+            false
+          )
+          .then((res) => {
+            const newCandidates = (res?.data ?? []) as Candidate[];
+            const sentence =
+              latestWords?.[latestBrushRow]
+                ?.slice(latestBrushLeft, latestBrushRight + 1)
+                .join('') ?? '';
+            const newCandidateIndex = newCandidates.findIndex(
+              (candidate) => candidate.text === sentence
+            );
+            setCandidateIndex(newCandidateIndex);
+            setCandidates(newCandidates);
+          });
+      }
     }
 
     // initilize brush instance
@@ -177,8 +274,32 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
 
     selectAll('.svg').selectAll('.gBrush').call(brush);
 
+    brushRef.current = brush;
+
     return () => {
       brush.on('brush', null).on('end', null);
+    };
+  }, [words.join('')]);
+
+  useEffect(() => {
+    const handleContextMenu = () => {
+      const isbrushing = brushingRef.current;
+      const brush = brushRef.current;
+
+      // Fix: 此时还需要清空刷选状态
+      setBrushLeft(-1);
+      setBrushRight(-1);
+      setBrushRow(-1);
+
+      isbrushing && selectAll('.svg').selectAll('.gBrush').call(brush.move, [0, 0]);
+    };
+
+    // bind contextmenu event
+    document.addEventListener('contextmenu', handleContextMenu);
+
+    // unbind contextmenu event
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
     };
   }, []);
 

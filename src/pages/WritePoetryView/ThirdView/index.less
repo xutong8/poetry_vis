@@ -1,0 +1,58 @@
+.third_view {
+  width: 100%;
+  height: 100%;
+  padding: 36px 48px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  .title {
+    font-size: 36px;
+    text-align: center;
+    line-height: 36px;
+  }
+
+  .candidates {
+    margin-top: 12px;
+    height: 240px;
+    display: flex;
+
+    .curve_lines {
+      flex: 1 0 0;
+      display: flex;
+    }
+
+    .text {
+      text-anchor: middle;
+      font-size: 16px;
+    }
+
+    .number {
+      .number_text {
+        font-size: 12px;
+      }
+    }
+
+    .words {
+      margin-top: 24px;
+      width: 72px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.36);
+      cursor: pointer;
+      overflow-y: auto;
+
+      .word {
+        margin-bottom: 12px;
+        font-size: 18px;
+
+        &:hover {
+          color: black;
+        }
+      }
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+}

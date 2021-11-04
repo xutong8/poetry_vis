@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './index.less';
-import { emotions } from './constant';
 import { IItem, RadarChart } from './RadarChart';
 import { httpRequest } from '@/services';
 import { Rhyme, SystemScore } from '..';
 import { generateWords } from '@/utils';
+import { emotions } from './constant';
+import { mappingForRhyme, generateRadarDataSource } from '@/utils';
 
 interface IFirstViewProps {
   sentenceSelected: Rhyme;
@@ -16,6 +17,11 @@ interface IFirstViewProps {
   setBrushRow: (brushRow: number) => void;
   setBrushLeft: (brushLeft: number) => void;
   setBrushRight: (brushRight: number) => void;
+  emotionsSelected: string[];
+  setEmotionsSelected: (emotionsSelected: string[]) => void;
+  radarDataSource: IItem[][];
+  setRadarDataSource: (radarDataSource: IItem[][]) => void;
+  generateEmotion: () => number[];
 }
 
 const FirstView: React.FC<IFirstViewProps> = (props) => {
@@ -28,26 +34,16 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     setRhymeList,
     setBrushRow,
     setBrushLeft,
-    setBrushRight
+    setBrushRight,
+    emotionsSelected,
+    radarDataSource,
+    setEmotionsSelected,
+    setRadarDataSource,
+    generateEmotion
   } = props;
 
   const getSentenceSelectCls = (sentence: number) => {
     return sentenceSelected === sentence ? 'sentenceSelected' : '';
-  };
-
-  // 默认选中的情绪
-  const [emotionsSelected, setEmotionsSelected] = useState<string[]>([
-    '思念远方',
-    '军旅悲壮',
-    '忧国忧民'
-  ]);
-
-  // 生成雷达图数据
-  const generateRadarDataSource = (emotions: string[]) => {
-    return [
-      emotions.map((emotion) => ({ value: 0, axis: emotion })),
-      emotions.map((emotion) => ({ value: 0.5, axis: emotion }))
-    ];
   };
 
   // 切换emotion
@@ -60,29 +56,6 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
       const newEmotionsSelected = [...emotionsSelected, emotion];
       setEmotionsSelected(newEmotionsSelected);
       setRadarDataSource(generateRadarDataSource(newEmotionsSelected));
-    }
-  };
-
-  // radarChart dataSource
-  // 第一个元素为实际效果；第二个元素为预期效果；
-  const [radarDataSource, setRadarDataSource] = useState<IItem[][]>(
-    generateRadarDataSource(emotionsSelected)
-  );
-
-  // 生成emotion
-  const generateEmotion = () =>
-    emotions.map((emotion) => radarDataSource[1].find((item) => item.axis === emotion)?.value ?? 0);
-
-  // 五言 -> 2；七言 -> 0；
-  // 这里做一层映射；
-  const mappingForRhyme = (sentenceSelected: Rhyme) => {
-    switch (sentenceSelected) {
-      case Rhyme.FIVE_WORD:
-        return 2;
-      case Rhyme.SEVEN_WORD:
-        return 0;
-      default:
-        return 2;
     }
   };
 
