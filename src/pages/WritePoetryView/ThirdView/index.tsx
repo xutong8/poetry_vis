@@ -1,10 +1,11 @@
 import { useElementSize } from '@/hooks/useElementSize';
 import { scaleLinear } from 'd3-scale';
 import { range } from 'lodash';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Candidate } from '..';
 import './index.less';
 import { linkVertical } from 'd3-shape';
+import { select } from 'd3-selection';
 
 export interface IThirdViewProps {
   candidates: Candidate[];
@@ -13,10 +14,21 @@ export interface IThirdViewProps {
   brushRow: number;
   words: string[][];
   setWords: (words: string[][]) => void;
+  candidateIndex: number;
+  setCandidateIndex: (candidateIndex: number) => void;
 }
 
 const ThirdView: React.FC<IThirdViewProps> = (props) => {
-  const { candidates, brushLeft, brushRight, brushRow, setWords, words } = props;
+  const {
+    candidates,
+    setCandidateIndex,
+    brushLeft,
+    brushRight,
+    brushRow,
+    setWords,
+    words,
+    candidateIndex
+  } = props;
 
   // container ref
   const containerRef = useRef<HTMLDivElement>(null);
@@ -76,7 +88,29 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
     for (let i = brushLeft, j = 0; i <= brushRight; i++, j++) {
       newWords?.[brushRow] && (newWords[brushRow][i] = text[j]);
     }
+    const sentence = newWords?.[brushRow]?.slice(brushLeft, brushRight + 1).join('') ?? '';
+    const newCandidateIndex = candidates.findIndex((candidate) => candidate.text === sentence);
+    setCandidateIndex(newCandidateIndex);
     setWords(newWords);
+  };
+
+  // 处理候选词mouseover
+  const handleCandidateOver = (index: number) => {
+    select(`#candidate${index}`).style('color', 'black');
+    select(`#curve${index}`).select('path').attr('opacity', 1.0);
+    select(`#curve${index}`).selectAll('circle').attr('opacity', 1.0).attr('r', 2.5);
+  };
+
+  // 处理候选词mouseout
+  const handleCandidateOut = (index: number) => {
+    select(`#candidate${index}`).style('color', 'rgba(0, 0, 0, 0.36)');
+    select(`#curve${index}`)
+      .select('path')
+      .attr('opacity', index === candidateIndex ? 0.5 : 0.1);
+    select(`#curve${index}`)
+      .selectAll('circle')
+      .attr('opacity', index === candidateIndex ? 0.8 : 0.1)
+      .attr('r', 2);
   };
 
   return (
@@ -84,8 +118,15 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
       <div className="title">雕章琢句</div>
       <div className="candidates">
         <div className="words">
-          {candidates.map((candidate) => (
-            <div key={candidate.text} className="word" onClick={() => updateWords(candidate.text)}>
+          {candidates.map((candidate, index: number) => (
+            <div
+              key={candidate.text}
+              id={`candidate${index}`}
+              className="word"
+              onClick={() => updateWords(candidate.text)}
+              onMouseOver={() => handleCandidateOver(index)}
+              onMouseOut={() => handleCandidateOut(index)}
+            >
               {candidate.text}
             </div>
           ))}
@@ -152,36 +193,35 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
                   target: rhyme_point
                 } as any) as string;
 
-                // TODO: 添加交互
                 return (
-                  <g key={index}>
+                  <g key={index} id={`curve${index}`}>
                     <path
-                      opacity="0.1"
+                      opacity={index === candidateIndex ? 0.5 : 0.1}
                       d={line1 + line2}
                       fill="none"
-                      stroke="grey"
-                      strokeWidth="2.5"
+                      stroke={index === candidateIndex ? '#CC333F' : 'grey'}
+                      strokeWidth={index === candidateIndex ? 2 : 1.5}
                     />
                     <circle
                       cx={continuity_point[0]}
                       cy={continuity_point[1]}
-                      r="3"
-                      fill="grey"
-                      opacity="0.5"
+                      r={index === candidateIndex ? 2.5 : 2}
+                      fill={index === candidateIndex ? '#CC333F' : 'grey'}
+                      opacity={index === candidateIndex ? 0.8 : 0.1}
                     />
                     <circle
                       cx={emotion_point[0]}
                       cy={emotion_point[1]}
-                      r="3"
-                      fill="grey"
-                      opacity="0.5"
+                      r={index === candidateIndex ? 2.5 : 2}
+                      fill={index === candidateIndex ? '#CC333F' : 'grey'}
+                      opacity={index === candidateIndex ? 0.8 : 0.1}
                     />
                     <circle
                       cx={rhyme_point[0]}
                       cy={rhyme_point[1]}
-                      r="3"
-                      fill="grey"
-                      opacity="0.5"
+                      r={index === candidateIndex ? 2.5 : 2}
+                      fill={index === candidateIndex ? '#CC333F' : 'grey'}
+                      opacity={index === candidateIndex ? 0.8 : 0.1}
                     />
                   </g>
                 );

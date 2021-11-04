@@ -34,6 +34,7 @@ export interface ISecondViewProps {
   setCandidates: (candidates: Candidate[]) => void;
   generateEmotion: () => number[];
   sentenceSelected: Rhyme;
+  setCandidateIndex: (candidateIndex: number) => void;
 }
 
 const SecondView: React.FC<ISecondViewProps> = (props) => {
@@ -50,7 +51,8 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     setBrushRight,
     setCandidates,
     generateEmotion,
-    sentenceSelected
+    sentenceSelected,
+    setCandidateIndex
   } = props;
 
   // 选中的建议
@@ -247,7 +249,16 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
             false
           )
           .then((res) => {
-            setCandidates((res?.data ?? []) as Candidate[]);
+            const newCandidates = (res?.data ?? []) as Candidate[];
+            const sentence =
+              latestWords?.[latestBrushRow]
+                ?.slice(latestBrushLeft, latestBrushRight + 1)
+                .join('') ?? '';
+            const newCandidateIndex = newCandidates.findIndex(
+              (candidate) => candidate.text === sentence
+            );
+            setCandidateIndex(newCandidateIndex);
+            setCandidates(newCandidates);
           });
       }
     }

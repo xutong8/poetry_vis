@@ -79,6 +79,9 @@ const WritePoetryView: React.FC<any> = () => {
   const generateEmotion = () =>
     emotions.map((emotion) => radarDataSource[1].find((item) => item.axis === emotion)?.value ?? 0);
 
+  // 选中的候选词索引
+  const [candidateIndex, setCandidateIndex] = useState<number>(-1);
+
   return (
     <div className="write_poetry_container">
       <img src={write_poetry} className="img" />
@@ -121,6 +124,7 @@ const WritePoetryView: React.FC<any> = () => {
             setCandidates={setCandidates}
             generateEmotion={generateEmotion}
             sentenceSelected={sentenceSelected}
+            setCandidateIndex={setCandidateIndex}
           />
         </div>
         {candidates && candidates.length !== 0 ? (
@@ -132,6 +136,9 @@ const WritePoetryView: React.FC<any> = () => {
               brushRow={brushRow}
               words={words}
               setWords={setWords}
+              // 当前选择的候选词索引
+              candidateIndex={candidateIndex}
+              setCandidateIndex={setCandidateIndex}
             />
           </div>
         ) : null}
