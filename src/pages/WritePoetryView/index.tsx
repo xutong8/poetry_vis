@@ -35,7 +35,11 @@ export interface Candidate {
   text: string;
 }
 
-const WritePoetryView: React.FC<any> = () => {
+export interface RecommendWord {
+  [key: string]: string;
+}
+
+const WritePoetryView: React.FC = () => {
   // 定义一个state，用于区分当前选中的是五言 or 七言，默认为五言
   const [sentenceSelected, setSentenceSelected] = useState<Rhyme>(Rhyme.FIVE_WORD);
 
@@ -61,6 +65,9 @@ const WritePoetryView: React.FC<any> = () => {
 
   // 候选词，有的话才展示第三个视图
   const [candidates, setCandidates] = useState<Candidate[]>([]);
+
+  // 推荐词，第三个视图用
+  const [recommendWords, setRecommendWords] = useState<RecommendWord[]>([]);
 
   // 默认选中的情绪
   const [emotionsSelected, setEmotionsSelected] = useState<string[]>([
@@ -125,20 +132,26 @@ const WritePoetryView: React.FC<any> = () => {
             generateEmotion={generateEmotion}
             sentenceSelected={sentenceSelected}
             setCandidateIndex={setCandidateIndex}
+            setRecommendWords={setRecommendWords}
           />
         </div>
         {candidates && candidates.length !== 0 ? (
           <div className="base_view">
             <ThirdView
+              words={words}
               candidates={candidates}
               brushLeft={brushLeft}
               brushRight={brushRight}
               brushRow={brushRow}
-              words={words}
               setWords={setWords}
               // 当前选择的候选词索引
               candidateIndex={candidateIndex}
+              setCandidates={setCandidates}
+              sentenceSelected={sentenceSelected}
               setCandidateIndex={setCandidateIndex}
+              recommendWords={recommendWords}
+              setRecommendWords={setRecommendWords}
+              generateEmotion={generateEmotion}
             />
           </div>
         ) : null}

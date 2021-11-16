@@ -9,8 +9,8 @@ import {
 } from './constant';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import Cell from './Cell';
-import { computeRhythm } from '@/utils';
-import { Candidate, Rhyme, SystemScore } from '..';
+import { computeRhythm, generateYun } from '@/utils';
+import { Candidate, RecommendWord, Rhyme, SystemScore } from '..';
 import ScoreBoard from './ScoreBoard';
 import { brushX } from 'd3-brush';
 import { select, selectAll } from 'd3-selection';
@@ -35,6 +35,7 @@ export interface ISecondViewProps {
   generateEmotion: () => number[];
   sentenceSelected: Rhyme;
   setCandidateIndex: (candidateIndex: number) => void;
+  setRecommendWords: (recommendWords: RecommendWord[]) => void;
 }
 
 const SecondView: React.FC<ISecondViewProps> = (props) => {
@@ -52,7 +53,8 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     setCandidates,
     generateEmotion,
     sentenceSelected,
-    setCandidateIndex
+    setCandidateIndex,
+    setRecommendWords
   } = props;
 
   // 选中的建议
@@ -222,14 +224,11 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
       const latestBrushRight = brushRightRef.current;
       // 最新的words
       const latestWords = wordsRef.current;
+      console.log('latest', latestWords);
 
       // poem参数数组
       const poem = latestWords.map((row: string[]) => row.join('')).join('|');
-
-      // 根据pingList随机生成yun
-      const pingList = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27];
-      const len = pingList.length;
-      const yun = pingList[Math.floor(Math.random() * len)];
+      console.log('poem', poem);
 
       // brush刷选完后，发送getCandidate请求
       if (latestBrushLeft !== -1 || latestBrushRight !== -1) {
@@ -239,7 +238,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
               ','
             )}&poem=${poem}&rhyme=${mappingForRhyme(
               sentenceSelected
-            )}&yun=${yun}&marker=${generateMarker(
+            )}&yun=${generateYun()}&marker=${generateMarker(
               latestWords,
               latestBrushRow,
               latestBrushLeft,
@@ -259,6 +258,25 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
             );
             setCandidateIndex(newCandidateIndex);
             setCandidates(newCandidates);
+          });
+        httpRequest
+          .get(
+            `/mode_1/get_distribution?emotion=${generateEmotion().join(
+              ','
+            )}&poem=${poem}&rhyme=${mappingForRhyme(
+              sentenceSelected
+            )}&yun=${generateYun()}&marker=${generateMarker(
+              latestWords,
+              latestBrushRow,
+              latestBrushLeft,
+              latestBrushRight
+            )}`,
+            {},
+            false
+          )
+          .then((res) => {
+            const newRecommendWords = (res?.data ?? []) as RecommendWord[];
+            setRecommendWords(newRecommendWords);
           });
       }
     }

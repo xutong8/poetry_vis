@@ -81,3 +81,11 @@ export const generateMarker = (words: string[][], row: number, left: number, rig
     })
     .join('|');
 };
+
+export const generateYun = () => {
+  // 根据pingList随机生成yun
+  const pingList = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27];
+  const len = pingList.length;
+  const yun = pingList[Math.floor(Math.random() * len)];
+  return yun;
+};

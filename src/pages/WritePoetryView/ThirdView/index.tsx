@@ -2,11 +2,11 @@ import { useElementSize } from '@/hooks/useElementSize';
 import { scaleLinear } from 'd3-scale';
 import { range } from 'lodash';
 import { useRef, useState } from 'react';
-import { Candidate } from '..';
+import { Candidate, RecommendWord, Rhyme } from '..';
 import './index.less';
 import { linkVertical } from 'd3-shape';
 import { select } from 'd3-selection';
-
+import Lower from './Lower';
 export interface IThirdViewProps {
   candidates: Candidate[];
   brushLeft: number;
@@ -14,8 +14,13 @@ export interface IThirdViewProps {
   brushRow: number;
   words: string[][];
   setWords: (words: string[][]) => void;
+  sentenceSelected: Rhyme;
   candidateIndex: number;
+  setCandidates: (candidates: Candidate[]) => void;
   setCandidateIndex: (candidateIndex: number) => void;
+  recommendWords: RecommendWord[];
+  setRecommendWords: (recommendWords: RecommendWord[]) => void;
+  generateEmotion: () => number[];
 }
 
 const ThirdView: React.FC<IThirdViewProps> = (props) => {
@@ -27,7 +32,12 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
     brushRow,
     setWords,
     words,
-    candidateIndex
+    candidateIndex,
+    recommendWords,
+    setRecommendWords,
+    generateEmotion,
+    sentenceSelected,
+    setCandidates
   } = props;
 
   // container ref
@@ -230,6 +240,19 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
           </svg>
         </div>
       </div>
+      <div className="title">逐字推敲</div>
+      <Lower
+        words={words}
+        brushLeft={brushLeft}
+        brushRight={brushRight}
+        brushRow={brushRow}
+        sentenceSelected={sentenceSelected}
+        // 当前选择的候选词索引
+        setCandidates={setCandidates}
+        recommendWords={recommendWords}
+        generateEmotion={generateEmotion}
+        updateWords={updateWords}
+      />
     </div>
   );
 };

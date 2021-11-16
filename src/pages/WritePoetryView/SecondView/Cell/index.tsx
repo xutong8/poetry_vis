@@ -46,6 +46,8 @@ const Cell: React.FC<ICellProps> = (props) => {
     <div className="cell">
       <div className="grid">
         <input
+          id="wordAnimation"
+          key={word}
           defaultValue={word}
           type="text"
           style={{
