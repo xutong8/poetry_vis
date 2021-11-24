@@ -10,6 +10,11 @@ import fourth_rhythm from './rhythms/fourth.svg';
 import empty_rhythm from './rhythms/empty.svg';
 import clip_article from './clip_article.png';
 import cloud_fly from './cloud_fly.png';
+import gou from './gou.png';
+import backwards from './backwards.png';
+import red from './red.png';
+import black from './black.png';
+import maobi from './maobi.svg';
 
 // 宣纸背景
 export { backgroundImage };
@@ -27,3 +32,5 @@ export { clip_article };
 
 // 逸兴云飞
 export { cloud_fly };
+
+export { gou, backwards, red, black, maobi };

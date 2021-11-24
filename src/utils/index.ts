@@ -42,3 +42,50 @@ export const generateWords = (rhyme: Rhyme) => {
 
   return words;
 };
+
+// 五言 -> 2；七言 -> 0；
+// 这里做一层映射；
+export const mappingForRhyme = (sentenceSelected: Rhyme) => {
+  switch (sentenceSelected) {
+    case Rhyme.FIVE_WORD:
+      return 2;
+    case Rhyme.SEVEN_WORD:
+      return 0;
+    default:
+      return 2;
+  }
+};
+
+// 生成雷达图数据
+export const generateRadarDataSource = (emotions: string[]) => {
+  return [
+    emotions.map((emotion) => ({ value: 0, axis: emotion })),
+    emotions.map((emotion) => ({ value: 0.5, axis: emotion }))
+  ];
+};
+
+// 生成marker
+export const generateMarker = (words: string[][], row: number, left: number, right: number) => {
+  return words
+    .map((rowGroup: string[], rowIndex: number) => {
+      const len = rowGroup.length;
+      const arr = new Array(len).fill(0);
+
+      if (rowIndex === row) {
+        for (let i = left; i <= right; i++) {
+          arr[i] = 1;
+        }
+      }
+
+      return arr.join(',');
+    })
+    .join('|');
+};
+
+export const generateYun = () => {
+  // 根据pingList随机生成yun
+  const pingList = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27];
+  const len = pingList.length;
+  const yun = pingList[Math.floor(Math.random() * len)];
+  return yun;
+};

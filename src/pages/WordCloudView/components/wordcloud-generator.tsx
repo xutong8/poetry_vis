@@ -55,30 +55,12 @@ const WordCloudGenerator: React.FC<IProps> = (props) => {
     });
 
     let finish_data: any[] = [];
-    // data.forEach((elm) => {
-    //   if (elm.num > center_elm.num) {
-    //     center_elm = elm;
-    //   }
-    // });
-    // const { center_x, center_y } = center_elm;
-    // data.forEach((elm) => {
-    //   elm.center_x -= center_x;
-    //   elm.center_y -= center_y;
-    // });
-    // console.log(data.map(elm=> elm.text).join(','))
-    // 指不定可以换一种方法
-    // const sortByCenter = arr =>{
-    //     let elm2dist = {}
-    //     arr.forEach(elm=>{
-    //         elm2dist[elm.text] = euclidean([elm.x, elm.y], [center_x, center_y])
-    //     })
-    //     return arr.sort((a,b)=> elm2dist[a.text]-elm2dist[b.text])
-    // }
     const sortByNum = (arr: any[]) => {
       return arr.sort((a, b) => b.num - a.num);
     };
     data = sortByNum(data);
 
+    // 碰撞检测
     const collisionDetect = (text_elm: WordElm) => {
       for (let index = 0; index < finish_data.length; index++) {
         const elm = finish_data[index];
@@ -97,8 +79,8 @@ const WordCloudGenerator: React.FC<IProps> = (props) => {
     let start_angle = Math.PI * 0.65,
       angle_pword = (Math.PI * 2) / data_area;
 
-    let data1_range = [0, angle_pword * data1_area],
-      int_range0 = [data1_range[1], data1_range[1]];
+    let data1_range = [0, angle_pword * data1_area];
+    // int_range0 = [data1_range[1], data1_range[1]];
 
     // console.log(data1_range, int_range0, data2_range, int_range1)
     // 为每个找一个最近的能放的位置
@@ -116,14 +98,15 @@ const WordCloudGenerator: React.FC<IProps> = (props) => {
       let min_r = 9999,
         min_angle = 0;
       let angles = [];
-      if (elm.belong === 0) {
-        angles = range2Angles(data1_range);
-      } else if (elm.belong === 1) {
-        angles = [...range2Angles(int_range0)];
-      } else {
-        console.error(elm, 'belong有问题');
-        return;
-      }
+      angles = range2Angles(data1_range);
+      // if (elm.belong === 0) {
+      //   angles = range2Angles(data1_range);
+      // } else if (elm.belong === 1) {
+      //   angles = [...range2Angles(int_range0)];
+      // } else {
+      //   console.error(elm, 'belong有问题');
+      //   return;
+      // }
       angles.forEach((angle) => {
         let r = 0;
         const cos = Math.cos(angle),
@@ -155,32 +138,32 @@ const WordCloudGenerator: React.FC<IProps> = (props) => {
     const text_g = textRef.current;
 
     // 中间做差的矩阵
-    d3.select(text_g).selectAll('.text_back_ground').remove();
-    data.forEach((d) => {
-      if (d.belong === 1) {
-        const total_num = d.num1 + d.num2,
-          width1 = (d.width / total_num) * d.num1,
-          width2 = (d.width / total_num) * d.num2;
+    // d3.select(text_g).selectAll('.text_back_ground').remove();
+    // data.forEach((d) => {
+    //   if (d.belong === 1) {
+    //     const total_num = d.num1 + d.num2,
+    //       width1 = (d.width / total_num) * d.num1,
+    //       width2 = (d.width / total_num) * d.num2;
 
-        d3.select(text_g)
-          .append('rect')
-          .attr('x', d.center_x - d.width / 2 + width / 2)
-          .attr('y', d.center_y - d.height / 2 + height / 2)
-          .attr('width', width1)
-          .attr('height', d.height)
-          .attr('class', 'text_back_ground')
-          .attr('fill', '#588BC4');
+    //     d3.select(text_g)
+    //       .append('rect')
+    //       .attr('x', d.center_x - d.width / 2 + width / 2)
+    //       .attr('y', d.center_y - d.height / 2 + height / 2)
+    //       .attr('width', width1)
+    //       .attr('height', d.height)
+    //       .attr('class', 'text_back_ground')
+    //       .attr('fill', '#588BC4');
 
-        d3.select(text_g)
-          .append('rect')
-          .attr('x', d.center_x - d.width / 2 + width / 2 + width1)
-          .attr('y', d.center_y - d.height / 2 + height / 2)
-          .attr('width', width2)
-          .attr('height', d.height)
-          .attr('class', 'text_back_ground')
-          .attr('fill', '#C1A1AA');
-      }
-    });
+    //     d3.select(text_g)
+    //       .append('rect')
+    //       .attr('x', d.center_x - d.width / 2 + width / 2 + width1)
+    //       .attr('y', d.center_y - d.height / 2 + height / 2)
+    //       .attr('width', width2)
+    //       .attr('height', d.height)
+    //       .attr('class', 'text_back_ground')
+    //       .attr('fill', '#C1A1AA');
+    //   }
+    // });
 
     d3.select(text_g).selectAll('.text_tag').remove();
     d3.select(text_g)
@@ -204,7 +187,7 @@ const WordCloudGenerator: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     draw();
-  }, [initData]);
+  }, [initData, width, height]);
 
   return (
     <div style={{ position: 'absolute' }}>
