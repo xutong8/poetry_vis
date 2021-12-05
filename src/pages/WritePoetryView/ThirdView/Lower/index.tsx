@@ -370,7 +370,7 @@ const Lower: React.FC<LowerViewProps> = (props) => {
   useEffect(() => {
     const data = handleData(recommendWords);
     // 生成root
-    if (data.children) {
+    if (data.children && data.children.length !== 0) {
       stack.current.root = {
         index: data.children[0].name,
         update_words: '',

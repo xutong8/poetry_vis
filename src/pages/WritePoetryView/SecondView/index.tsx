@@ -224,11 +224,11 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
       const latestBrushRight = brushRightRef.current;
       // 最新的words
       const latestWords = wordsRef.current;
-      console.log('latest', latestWords);
+      // console.log('latest', latestWords);
 
       // poem参数数组
       const poem = latestWords.map((row: string[]) => row.join('')).join('|');
-      console.log('poem', poem);
+      // console.log('poem', poem);
 
       // brush刷选完后，发送getCandidate请求
       if (latestBrushLeft !== -1 || latestBrushRight !== -1) {
