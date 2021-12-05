@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { httpRequest } from '@/services';
 import { cloud_fly } from '@/assets/images';
 import useWindowSize from '@/hooks/use-windows-size';
 import './index.less';
 import WordCloudGenerator from './components/wordcloud-generator';
+import { useElementSize } from '@/hooks/useElementSize';
 
 type ResponseData = [string, number][];
 
@@ -13,7 +14,8 @@ export interface Word {
 }
 
 const WordCloudView: React.FC = () => {
-  const [width, height] = useWindowSize();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [width, height] = useElementSize(containerRef);
   const [data, setData] = useState<Word[]>([]);
 
   const getTotalValue = (data: Word[]) => data.reduce((total, elm) => total + elm.value, 0);
@@ -47,7 +49,7 @@ const WordCloudView: React.FC = () => {
   }, []);
 
   return (
-    <div className="word-page">
+    <div className="word-page" ref={containerRef}>
       <img className="title" src={cloud_fly} alt="title" />
       <WordCloudGenerator width={width} height={height} initData={data} />
     </div>
