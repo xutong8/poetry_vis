@@ -69,6 +69,12 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     const len = pingList.length;
     const yun = pingList[Math.floor(Math.random() * len)];
 
+    setWordAnimationObj({
+      show_brush: false,
+      fade: false,
+      cur_idx: 0
+    });
+
     // 发送writePoems请求
     const { data: writePoemsData } = await httpRequest.get(
       `/mode_1/writePoems?emotion=${generateEmotion()}&rhyme=${mappingForRhyme(
