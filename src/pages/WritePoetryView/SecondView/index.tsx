@@ -17,6 +17,7 @@ import { select, selectAll } from 'd3-selection';
 import { range } from 'lodash';
 import { httpRequest } from '@/services';
 import { mappingForRhyme, generateMarker } from '@/utils';
+import { WordAnimationObj } from '@/store';
 
 const { Option } = Select;
 
@@ -36,6 +37,8 @@ export interface ISecondViewProps {
   sentenceSelected: Rhyme;
   setCandidateIndex: (candidateIndex: number) => void;
   setRecommendWords: (recommendWords: RecommendWord[]) => void;
+  wordAnimationObj: WordAnimationObj;
+  setWordAnimationObj: (wordAnimationObj: WordAnimationObj) => void;
 }
 
 const SecondView: React.FC<ISecondViewProps> = (props) => {
@@ -54,7 +57,9 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     generateEmotion,
     sentenceSelected,
     setCandidateIndex,
-    setRecommendWords
+    setRecommendWords,
+    wordAnimationObj,
+    setWordAnimationObj
   } = props;
 
   // 选中的建议
@@ -321,6 +326,17 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     };
   }, []);
 
+  const customCellMounted = () => {
+    const cur_idx = wordAnimationObj.cur_idx;
+    setTimeout(() => {
+      setWordAnimationObj({
+        show_brush: true,
+        fade: true,
+        cur_idx: cur_idx + 1
+      });
+    }, 2000);
+  };
+
   return (
     <div className="second_view">
       <div className="title">挥毫泼墨</div>
@@ -357,19 +373,22 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
           return (
             <div className="gridsRow" key={groupIndex}>
               <div className="row">
-                {group.map((item, columnIndex: number) => (
-                  <Cell
-                    stress_text={
-                      groupIndex === brushRow &&
-                      columnIndex >= brushLeft &&
-                      columnIndex <= brushRight
-                    }
-                    word={item}
-                    rhythm={computeRhythm(item)}
-                    key={columnIndex}
-                    value={suggestionList?.[groupIndex]?.[columnIndex] ?? 1}
-                  />
-                ))}
+                {group.map((item, columnIndex: number) =>
+                  wordAnimationObj.cur_idx >= groupIndex * sentenceSelected + columnIndex ? (
+                    <Cell
+                      stress_text={
+                        groupIndex === brushRow &&
+                        columnIndex >= brushLeft &&
+                        columnIndex <= brushRight
+                      }
+                      word={item}
+                      rhythm={computeRhythm(item)}
+                      key={columnIndex}
+                      mounted={customCellMounted}
+                      value={suggestionList?.[groupIndex]?.[columnIndex] ?? 1}
+                    />
+                  ) : null
+                )}
                 <svg className="svg">
                   <g className="gBrush" id={`brush${groupIndex}`}></g>
                 </svg>

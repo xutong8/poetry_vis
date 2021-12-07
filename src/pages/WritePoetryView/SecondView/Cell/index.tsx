@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import './index.less';
 import {
   first_rhythm,
   second_rhythm,
   third_rhythm,
   fourth_rhythm,
-  empty_rhythm
+  empty_rhythm,
+  smallpen
 } from '@/assets/images';
 import { THRESHOLD_VALUE } from '../constant';
+import { WordAnimationContext } from '@/store';
 
 export enum Rhythm {
   ONE = 1,
@@ -21,10 +23,11 @@ export interface ICellProps {
   rhythm: Rhythm;
   value: number;
   stress_text: boolean;
+  mounted: () => void;
 }
 
 const Cell: React.FC<ICellProps> = (props) => {
-  const { word, rhythm, value, stress_text } = props;
+  const { word, rhythm, value, stress_text, mounted } = props;
 
   // 根据rhythm返回svg图片
   const getSVGByRhythm = (rhythm: Rhythm) => {
@@ -42,17 +45,31 @@ const Cell: React.FC<ICellProps> = (props) => {
     }
   };
 
+  const wordAnimationObj = useContext(WordAnimationContext);
+
+  useEffect(() => {
+    if (!wordAnimationObj.fade && !wordAnimationObj.show_brush) return;
+    mounted();
+  }, [wordAnimationObj.fade, wordAnimationObj.show_brush]);
+
   return (
     <div className="cell">
       <div className="grid">
         <input
-          id="wordAnimation"
+          className={wordAnimationObj.fade ? 'wordAnimation' : 'wordNoAnimation'}
           key={word}
           defaultValue={word}
           type="text"
           style={{
             backgroundColor: value < THRESHOLD_VALUE ? 'rgba(255, 95, 95, 0.21)' : 'transparent',
             color: stress_text ? 'rgb(167, 22, 22)' : 'black'
+          }}
+        />
+        <img
+          className="writingBrush"
+          src={smallpen}
+          style={{
+            display: wordAnimationObj.show_brush ? 'block' : 'none'
           }}
         />
       </div>

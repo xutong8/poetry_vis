@@ -9,6 +9,7 @@ import SecondView from './SecondView';
 import { emotions } from './FirstView/constant';
 import { generateRadarDataSource } from '@/utils';
 import ThirdView from './ThirdView';
+import { WordAnimationContext, WordAnimationObj } from '@/store';
 
 export enum Rhyme {
   FIVE_WORD = 5,
@@ -89,52 +90,64 @@ const WritePoetryView: React.FC = () => {
   // 选中的候选词索引
   const [candidateIndex, setCandidateIndex] = useState<number>(-1);
 
+  const [wordAnimationObj, setWordAnimationObj] = useState<WordAnimationObj>({
+    show_brush: false,
+    fade: false,
+    cur_idx: 20
+  });
+
   return (
     <div className="write_poetry_container">
       <img src={write_poetry} className="img" />
       <div className="write_poetry_content">
-        <div className="base_view">
-          <FirstView
-            sentenceSelected={sentenceSelected}
-            setSentenceSelected={setSentenceSelected}
-            setWords={setWords}
-            setSystemScore={setSystemScore}
-            setContinuityList={setContinuityList}
-            setRhymeList={setRhymeList}
-            // brush的范围
-            setBrushRow={setBrushRow}
-            setBrushLeft={setBrushLeft}
-            setBrushRight={setBrushRight}
-            // 选中的情感
-            emotionsSelected={emotionsSelected}
-            setEmotionsSelected={setEmotionsSelected}
-            // 雷达图数据
-            radarDataSource={radarDataSource}
-            setRadarDataSource={setRadarDataSource}
-            generateEmotion={generateEmotion}
-          />
-        </div>
-        <div className="base_view">
-          <SecondView
-            words={words}
-            systemScore={systemScore}
-            rhymeList={rhymeList}
-            continuityList={continuityList}
-            // brush刷选范围
-            brushRow={brushRow}
-            setBrushRow={setBrushRow}
-            brushLeft={brushLeft}
-            setBrushLeft={setBrushLeft}
-            brushRight={brushRight}
-            setBrushRight={setBrushRight}
-            // 设置候选词
-            setCandidates={setCandidates}
-            generateEmotion={generateEmotion}
-            sentenceSelected={sentenceSelected}
-            setCandidateIndex={setCandidateIndex}
-            setRecommendWords={setRecommendWords}
-          />
-        </div>
+        <WordAnimationContext.Provider value={wordAnimationObj}>
+          <div className="base_view">
+            <FirstView
+              sentenceSelected={sentenceSelected}
+              setSentenceSelected={setSentenceSelected}
+              setWords={setWords}
+              setSystemScore={setSystemScore}
+              setContinuityList={setContinuityList}
+              setRhymeList={setRhymeList}
+              // brush的范围
+              setBrushRow={setBrushRow}
+              setBrushLeft={setBrushLeft}
+              setBrushRight={setBrushRight}
+              // 选中的情感
+              emotionsSelected={emotionsSelected}
+              setEmotionsSelected={setEmotionsSelected}
+              // 雷达图数据
+              radarDataSource={radarDataSource}
+              setRadarDataSource={setRadarDataSource}
+              generateEmotion={generateEmotion}
+              // 修改animation obj
+              setWordAnimationObj={setWordAnimationObj}
+            />
+          </div>
+          <div className="base_view">
+            <SecondView
+              words={words}
+              systemScore={systemScore}
+              rhymeList={rhymeList}
+              continuityList={continuityList}
+              // brush刷选范围
+              brushRow={brushRow}
+              setBrushRow={setBrushRow}
+              brushLeft={brushLeft}
+              setBrushLeft={setBrushLeft}
+              brushRight={brushRight}
+              setBrushRight={setBrushRight}
+              // 设置候选词
+              setCandidates={setCandidates}
+              generateEmotion={generateEmotion}
+              sentenceSelected={sentenceSelected}
+              setCandidateIndex={setCandidateIndex}
+              setRecommendWords={setRecommendWords}
+              wordAnimationObj={wordAnimationObj}
+              setWordAnimationObj={setWordAnimationObj}
+            />
+          </div>
+        </WordAnimationContext.Provider>
         {candidates && candidates.length !== 0 ? (
           <div className="base_view">
             <ThirdView

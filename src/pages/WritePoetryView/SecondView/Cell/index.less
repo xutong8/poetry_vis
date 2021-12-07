@@ -1,6 +1,7 @@
 .cell {
   width: 45px;
   height: 94px;
+  margin: 0 12px;
 
   .grid {
     width: 45px;
@@ -23,7 +24,67 @@
         outline: none;
       }
     }
-    
+
+    .wordAnimation {
+      animation: fade 2s ease-in-out;
+      opacity: 1;
+    }
+
+    @keyframes fade {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .writingBrush {
+      animation: drawWord;
+      animation-duration: 2s;
+      width: 30px;
+      position: absolute;
+      top: 0px;
+      opacity: 0;
+    }
+
+    @keyframes drawWord {
+      0% {
+        top: 0px;
+        left: 0;
+        opacity: 1;
+      }
+      20% {
+        top: 0;
+        left: 14px;
+        opacity: 1;
+      }
+      40% {
+        top: 7px;
+        left: 7px;
+        opacity: 1;
+      }
+      60% {
+        top: 14px;
+        left: 0px;
+        opacity: 1;
+      }
+      80% {
+        top: 14px;
+        left: 7px;
+        opacity: 1;
+      }
+      99% {
+        top: 14px;
+        left: 14px;
+        opacity: 1;
+      }
+      100% {
+        top: 14px;
+        left: 14px;
+        opacity: 0;
+      }
+    }
   }
 
   .rhythm {
@@ -36,7 +97,6 @@
       height: 45px;
     }
   }
-
 }
 #wordAnimation {
   animation: fade 1.2s ease-in-out;
@@ -44,9 +104,9 @@
 
 @keyframes fade {
   0% {
-      opacity: 0;
+    opacity: 0;
   }
   100% {
-      opacity: 1;
+    opacity: 1;
   }
 }

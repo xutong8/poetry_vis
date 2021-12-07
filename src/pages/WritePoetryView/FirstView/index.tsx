@@ -6,6 +6,7 @@ import { Rhyme, SystemScore } from '..';
 import { generateWords } from '@/utils';
 import { emotions } from './constant';
 import { mappingForRhyme, generateRadarDataSource } from '@/utils';
+import { WordAnimationObj } from '@/store';
 
 interface IFirstViewProps {
   sentenceSelected: Rhyme;
@@ -22,6 +23,7 @@ interface IFirstViewProps {
   radarDataSource: IItem[][];
   setRadarDataSource: (radarDataSource: IItem[][]) => void;
   generateEmotion: () => number[];
+  setWordAnimationObj: (wordAnimationObj: WordAnimationObj) => void;
 }
 
 const FirstView: React.FC<IFirstViewProps> = (props) => {
@@ -39,7 +41,8 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     radarDataSource,
     setEmotionsSelected,
     setRadarDataSource,
-    generateEmotion
+    generateEmotion,
+    setWordAnimationObj
   } = props;
 
   const getSentenceSelectCls = (sentence: number) => {
@@ -123,6 +126,12 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     setBrushRow(-1);
     setBrushLeft(-1);
     setBrushRight(-1);
+
+    setWordAnimationObj({
+      show_brush: true,
+      fade: true,
+      cur_idx: 0
+    });
   };
 
   // 五言 or 七言 click事件

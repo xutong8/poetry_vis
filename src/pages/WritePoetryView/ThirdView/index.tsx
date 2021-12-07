@@ -157,6 +157,20 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
                 )
               )}
             </g>
+            <g className="number">
+              {[extremum.continuity[1], extremum.emotion[1], extremum.rhyme[1]].map(
+                (val, index) => (
+                  <text
+                    key={index}
+                    className="number_text"
+                    x={end_x - 32}
+                    y={start_y(index + 1) + 10}
+                  >
+                    {val?.toFixed(2)}
+                  </text>
+                )
+              )}
+            </g>
             <g className="axis">
               {range(1, 4).map((val) => (
                 <line
@@ -184,6 +198,14 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
                   points="0 0,5 10,10 0"
                   fill="#CC333F"
                   transform={`translate(${start_x - 5}, ${start_y(val) - 12})`}
+                />
+              ))}
+              {range(1, 4).map((val) => (
+                <polygon
+                  key={val}
+                  points="0 0,5 10,10 0"
+                  fill="#CC333F"
+                  transform={`translate(${end_x - 5}, ${start_y(val) - 12})`}
                 />
               ))}
             </g>

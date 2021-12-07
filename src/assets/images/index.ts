@@ -15,6 +15,7 @@ import backwards from './backwards.png';
 import red from './red.png';
 import black from './black.png';
 import maobi from './maobi.svg';
+import smallpen from './smallpen.cur';
 
 // 宣纸背景
 export { backgroundImage };
@@ -34,3 +35,6 @@ export { clip_article };
 export { cloud_fly };
 
 export { gou, backwards, red, black, maobi };
+
+// 毛笔小cur文件
+export { smallpen };

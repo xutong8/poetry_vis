@@ -15,16 +15,19 @@
     margin-right: 100px;
     flex: 1 0 0;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 
     .base_view {
       width: 495px;
-      height: 720px;
+      height: 780px;
       background-image: url('../../assets/images/write_poetry_box_background.png');
       background-repeat: no-repeat;
       background-size: 100% 100%;
       display: flex;
+
+      &:not(:first-child) {
+        margin-left: 50px;
+      }
     }
   }
 }
