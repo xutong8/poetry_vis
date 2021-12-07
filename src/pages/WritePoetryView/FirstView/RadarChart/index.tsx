@@ -200,7 +200,7 @@ const RadarChart: React.FC<IRadarChartProps> = (props) => {
                 className="legend"
                 textAnchor="middle"
                 x={rScale(1.25) * Math.cos(angleSlice * index - Math.PI / 2)}
-                y={rScale(1.12) * Math.sin(angleSlice * index - Math.PI / 2)}
+                y={rScale(1.12) * Math.sin(angleSlice * index - Math.PI / 2) + 5}
               >
                 {axis}
               </text>

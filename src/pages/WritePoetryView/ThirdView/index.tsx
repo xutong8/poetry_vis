@@ -48,7 +48,7 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
 
   // 起点和终点坐标
   const start_x = 50;
-  const start_y = (val: number) => (svgHeight > 0 ? ((svgHeight - 10) * val) / 3 : 0);
+  const start_y = (val: number) => (svgHeight > 0 ? ((svgHeight - 20) * val) / 3 : 0);
   const end_x = svgWidth > 0 ? svgWidth - 10 : 0;
 
   //draw curve lines
@@ -150,7 +150,7 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
                     key={index}
                     className="number_text"
                     x={start_x - 5}
-                    y={start_y(index + 1) + 10}
+                    y={start_y(index + 1) + 14}
                   >
                     {val?.toFixed(2)}
                   </text>
@@ -164,7 +164,7 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
                     key={index}
                     className="number_text"
                     x={end_x - 32}
-                    y={start_y(index + 1) + 10}
+                    y={start_y(index + 1) + 14}
                   >
                     {val?.toFixed(2)}
                   </text>

@@ -205,12 +205,13 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
 
       brushRightRef.current = r;
       setBrushRight(r);
+
+      console.log(l, r);
     }
 
     // handle brush end event
     function handleBrushEnd(event: any) {
       if (!event) return;
-
       const selection = event.selection;
 
       if (!selection) return;
@@ -229,11 +230,9 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
       const latestBrushRight = brushRightRef.current;
       // 最新的words
       const latestWords = wordsRef.current;
-      // console.log('latest', latestWords);
 
       // poem参数数组
       const poem = latestWords.map((row: string[]) => row.join('')).join('|');
-      // console.log('poem', poem);
 
       // brush刷选完后，发送getCandidate请求
       if (latestBrushLeft !== -1 || latestBrushRight !== -1) {
@@ -334,7 +333,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
         fade: true,
         cur_idx: cur_idx + 1
       });
-    }, 2000);
+    }, 500);
   };
 
   return (

@@ -137,7 +137,7 @@ module.exports = function (webpackEnv) {
             require('postcss-pxtorem')({
               rootValue: 16,
               minPixelValue: 1,
-              propList: ['*'],
+              propList: ['*', '!font-size'],
             }),
             // Adds PostCSS Normalize as the reset css with default options,
             // so that it honors browserslist config in package.json

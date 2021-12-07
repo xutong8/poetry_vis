@@ -72,7 +72,7 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     setWordAnimationObj({
       show_brush: false,
       fade: false,
-      cur_idx: 0
+      cur_idx: 20
     });
 
     // 发送writePoems请求
