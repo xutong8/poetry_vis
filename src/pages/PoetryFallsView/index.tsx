@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { httpRequest } from '@/services';
-import Sentence from './components/Sentence';
 import { clip_article } from '@/assets/images';
 import useWindowSize from '@/hooks/use-windows-size';
+import Sentence from './components/sentence';
 import './index.less';
 
 type ResponseData = [string, string][][];

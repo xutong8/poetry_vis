@@ -21,6 +21,7 @@ export interface IThirdViewProps {
   recommendWords: RecommendWord[];
   setRecommendWords: (recommendWords: RecommendWord[]) => void;
   generateEmotion: () => number[];
+  yun: number;
 }
 
 const ThirdView: React.FC<IThirdViewProps> = (props) => {
@@ -37,7 +38,8 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
     setRecommendWords,
     generateEmotion,
     sentenceSelected,
-    setCandidates
+    setCandidates,
+    yun
   } = props;
 
   // container ref
@@ -274,6 +276,7 @@ const ThirdView: React.FC<IThirdViewProps> = (props) => {
         recommendWords={recommendWords}
         generateEmotion={generateEmotion}
         updateWords={updateWords}
+        yun={yun}
       />
     </div>
   );

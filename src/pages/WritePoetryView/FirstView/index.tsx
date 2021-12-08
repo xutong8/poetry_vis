@@ -24,6 +24,8 @@ interface IFirstViewProps {
   setRadarDataSource: (radarDataSource: IItem[][]) => void;
   generateEmotion: () => number[];
   setWordAnimationObj: (wordAnimationObj: WordAnimationObj) => void;
+  yun: number;
+  setYun: (yun: number) => void;
 }
 
 const FirstView: React.FC<IFirstViewProps> = (props) => {
@@ -42,7 +44,9 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     setEmotionsSelected,
     setRadarDataSource,
     generateEmotion,
-    setWordAnimationObj
+    setWordAnimationObj,
+    yun,
+    setYun
   } = props;
 
   const getSentenceSelectCls = (sentence: number) => {
@@ -67,7 +71,8 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     // 根据pingList随机生成yun
     const pingList = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27];
     const len = pingList.length;
-    const yun = pingList[Math.floor(Math.random() * len)];
+    const yunJiao = pingList[Math.floor(Math.random() * len)];
+    setYun(yunJiao);
 
     setWordAnimationObj({
       show_brush: false,
@@ -79,7 +84,7 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     const { data: writePoemsData } = await httpRequest.get(
       `/mode_1/writePoems?emotion=${generateEmotion()}&rhyme=${mappingForRhyme(
         sentenceSelected
-      )}&yun=${yun}`,
+      )}&yun=${yunJiao}`,
       {},
       false
     );
@@ -96,7 +101,7 @@ const FirstView: React.FC<IFirstViewProps> = (props) => {
     const { data: analysePoemsData } = await httpRequest.get(
       `/mode_1/analysePoem?emotion=${generateEmotion()}&rhyme=${mappingForRhyme(
         sentenceSelected
-      )}&yun=${yun}&poem=${poem}`,
+      )}&yun=${yunJiao}&poem=${poem}`,
       {},
       false
     );

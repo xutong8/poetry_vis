@@ -6,7 +6,7 @@ import './index.less';
 import { hierarchy } from 'd3-hierarchy';
 import { select } from 'd3-selection';
 import * as d3 from 'd3';
-import { mappingForRhyme, generateMarker, generateYun } from '@/utils';
+import { mappingForRhyme, generateMarker } from '@/utils';
 
 // 根节点，用于生成d3.tree
 interface Root {
@@ -56,6 +56,7 @@ interface LowerViewProps {
   recommendWords: RecommendWord[];
   generateEmotion: () => number[];
   updateWords: (text: string) => void;
+  yun: number;
 }
 
 const Lower: React.FC<LowerViewProps> = (props) => {
@@ -68,7 +69,8 @@ const Lower: React.FC<LowerViewProps> = (props) => {
     sentenceSelected,
     generateEmotion,
     updateWords,
-    setCandidates
+    setCandidates,
+    yun
   } = props;
   const [width, height] = [800, 800];
   const stack = useRef<stack>({ root: null, last_root: [] });
@@ -157,17 +159,21 @@ const Lower: React.FC<LowerViewProps> = (props) => {
       .on('click', (e, d) => click(root, d));
 
     nodeEnter
-      .append('circle')
-      .attr('r', 20)
+      .append('image')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', 40)
+      .attr('height', 40)
+
       .attr('opacity', (d) => {
         return d.data.probability * 14;
       })
-      .style('fill', function (d) {
+      .attr('xlink:href', function (d: any) {
         return d.depth
-          ? d.data.name == stack.current.root?.index
-            ? 'url(#chosen)'
-            : 'url(#unchosen)'
-          : 'none';
+          ? d.data.name == stack.current.root?.index && d.depth == 1
+            ? red
+            : black
+          : '';
       });
 
     nodeEnter
@@ -196,14 +202,17 @@ const Lower: React.FC<LowerViewProps> = (props) => {
       });
 
     nodeUpdate
-      .select('circle')
-      .attr('r', 60)
-      .style('fill', function (d: any) {
+      .select('image')
+      .attr('x', -60)
+      .attr('y', -60)
+      .attr('width', 120)
+      .attr('height', 120)
+      .attr('xlink:href', function (d: any) {
         return d.depth
           ? d.data.name == stack.current.root?.index && d.depth == 1
-            ? 'url(#chosen)'
-            : 'url(#unchosen)'
-          : 'none';
+            ? red
+            : black
+          : '';
       });
 
     nodeUpdate.select('text').style('fill-opacity', 1);
@@ -259,6 +268,7 @@ const Lower: React.FC<LowerViewProps> = (props) => {
           ')'
       )
       .attr('class', 'chosen_text');
+    console.log('event', this);
   }
 
   function dragend() {
@@ -268,10 +278,15 @@ const Lower: React.FC<LowerViewProps> = (props) => {
     if (text == null) {
       return;
     }
-    if (
-      Math.abs(text.getBoundingClientRect().x - update_words.getBoundingClientRect().x) <= 40 &&
-      Math.abs(text.getBoundingClientRect().y - update_words.getBoundingClientRect().y) <= 40
-    ) {
+    const [textCenterX, textCenterY] = [
+      text.getBoundingClientRect().x + text.getBoundingClientRect().width / 2,
+      text.getBoundingClientRect().y + text.getBoundingClientRect().height / 2
+    ];
+    const [CenterX, CenterY] = [
+      update_words.getBoundingClientRect().x + update_words.getBoundingClientRect().width / 2,
+      update_words.getBoundingClientRect().y + update_words.getBoundingClientRect().height / 2
+    ];
+    if ((textCenterX - CenterX) ** 2 + (textCenterY - CenterY) ** 2 < 2500) {
       let rotate = (text?.parentNode as any)
         .getAttribute('transform')
         .match(/\((.+?)\)/g)[1]
@@ -304,6 +319,14 @@ const Lower: React.FC<LowerViewProps> = (props) => {
         stack.current.root = new_root;
         update(new_root);
       }
+    } else {
+      let rotate = (text?.parentNode as any)
+        .getAttribute('transform')
+        .match(/\((.+?)\)/g)[1]
+        .replace(/[(|)]/g, '');
+      select('.chosen_text')
+        .attr('transform', 'rotate(' + -rotate + ') translate(0,0)')
+        .attr('class', '');
     }
   }
 
@@ -321,7 +344,7 @@ const Lower: React.FC<LowerViewProps> = (props) => {
    * 获取下一个环的推荐字
    *
    * @param new_words 选中的词
-   * @param flag treu表示拖拽时触发，false表示点击时触发
+   * @param flag true表示拖拽时触发，false表示点击时触发
    */
   const getDistribution = (new_words: string, flag: boolean) => {
     let { root, last_root } = stack.current;
@@ -337,7 +360,7 @@ const Lower: React.FC<LowerViewProps> = (props) => {
           ','
         )}&poem=${poem}&rhyme=${mappingForRhyme(
           sentenceSelected
-        )}&yun=${generateYun()}&marker=${generateMarker(
+        )}&yun=${yun}&marker=${generateMarker(
           newWords,
           brushRow,
           brushLeft + new_words.length,
@@ -356,7 +379,7 @@ const Lower: React.FC<LowerViewProps> = (props) => {
           stack.current.root = new_root;
           update(new_root);
         } else {
-          last_root.push(root!);
+          // last_root.push(root!);
           let new_root = JSON.parse(JSON.stringify(root));
           new_root.children[0].children = handleData(res.data).children;
           new_root.children[0].children[0].children = null;
@@ -368,6 +391,7 @@ const Lower: React.FC<LowerViewProps> = (props) => {
   };
 
   useEffect(() => {
+    stack.current = { root: null, last_root: [] };
     const data = handleData(recommendWords);
     // 生成root
     if (data.children && data.children.length !== 0) {
@@ -390,7 +414,14 @@ const Lower: React.FC<LowerViewProps> = (props) => {
     <div className="lower">
       <svg id="lowerSvg" className="lowerSvg" viewBox={`0 0 ${width} ${height}`}>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
-          <text className="update_words" textAnchor="middle" fontSize="70" dy="10"></text>
+          <text
+            x="0"
+            y="0"
+            className="update_words"
+            textAnchor="middle"
+            fontSize="70"
+            dy="10"
+          ></text>
           <image
             width="120"
             height="120"
@@ -401,14 +432,6 @@ const Lower: React.FC<LowerViewProps> = (props) => {
           />
           <image width="100" height="120" xlinkHref={gou} x="-450" y="0" onClick={onFinish} />
           <image width="80" height="80" xlinkHref={maobi} x="-40" y="-40" opacity="0.5"></image>
-          <defs>
-            <pattern id="chosen" width="100" height="100">
-              <image xlinkHref={red} width="120" height="120" x={0} y={0} />
-            </pattern>
-            <pattern id="unchosen" width="100" height="100">
-              <image xlinkHref={black} width="120" height="120" x={0} y={0} opacity="0.8" />
-            </pattern>
-          </defs>
         </g>
       </svg>
     </div>

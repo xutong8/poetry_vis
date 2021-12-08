@@ -9,7 +9,7 @@ import {
 } from './constant';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import Cell from './Cell';
-import { computeRhythm, generateYun } from '@/utils';
+import { computeRhythm } from '@/utils';
 import { Candidate, RecommendWord, Rhyme, SystemScore } from '..';
 import ScoreBoard from './ScoreBoard';
 import { brushX } from 'd3-brush';
@@ -39,6 +39,7 @@ export interface ISecondViewProps {
   setRecommendWords: (recommendWords: RecommendWord[]) => void;
   wordAnimationObj: WordAnimationObj;
   setWordAnimationObj: (wordAnimationObj: WordAnimationObj) => void;
+  yun: number;
 }
 
 const SecondView: React.FC<ISecondViewProps> = (props) => {
@@ -59,7 +60,8 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
     setCandidateIndex,
     setRecommendWords,
     wordAnimationObj,
-    setWordAnimationObj
+    setWordAnimationObj,
+    yun
   } = props;
 
   // 选中的建议
@@ -242,7 +244,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
               ','
             )}&poem=${poem}&rhyme=${mappingForRhyme(
               sentenceSelected
-            )}&yun=${generateYun()}&marker=${generateMarker(
+            )}&yun=${yun}&marker=${generateMarker(
               latestWords,
               latestBrushRow,
               latestBrushLeft,
@@ -269,7 +271,7 @@ const SecondView: React.FC<ISecondViewProps> = (props) => {
               ','
             )}&poem=${poem}&rhyme=${mappingForRhyme(
               sentenceSelected
-            )}&yun=${generateYun()}&marker=${generateMarker(
+            )}&yun=${yun}&marker=${generateMarker(
               latestWords,
               latestBrushRow,
               latestBrushLeft,

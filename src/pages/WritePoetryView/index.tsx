@@ -95,6 +95,8 @@ const WritePoetryView: React.FC = () => {
     fade: false,
     cur_idx: 20
   });
+  // 生成诗歌时随机确认的韵脚
+  const [yun, setYun] = useState<number>(0);
 
   return (
     <div className="write_poetry_container">
@@ -122,6 +124,8 @@ const WritePoetryView: React.FC = () => {
               generateEmotion={generateEmotion}
               // 修改animation obj
               setWordAnimationObj={setWordAnimationObj}
+              yun={yun}
+              setYun={setYun}
             />
           </div>
           <div className="base_view">
@@ -145,6 +149,7 @@ const WritePoetryView: React.FC = () => {
               setRecommendWords={setRecommendWords}
               wordAnimationObj={wordAnimationObj}
               setWordAnimationObj={setWordAnimationObj}
+              yun={yun}
             />
           </div>
         </WordAnimationContext.Provider>
@@ -165,6 +170,7 @@ const WritePoetryView: React.FC = () => {
               recommendWords={recommendWords}
               setRecommendWords={setRecommendWords}
               generateEmotion={generateEmotion}
+              yun={yun}
             />
           </div>
         ) : null}
